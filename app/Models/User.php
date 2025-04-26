@@ -42,7 +42,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class);
     }
-
+    public function kepalaSekolah()
+    {
+    return $this->hasOne(KepalaSekolah::class, 'user_id');
+    }
+    public function wakilKurikulum()
+    {
+    return $this->hasOne(WakilKurikulum::class, 'user_id');
+    }
     public function guru(): HasOne
     {
         return $this->hasOne(Guru::class);

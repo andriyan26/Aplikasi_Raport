@@ -119,8 +119,25 @@ class KirimNilaiAkhirController extends Controller
                             $nilai_pts_pas = K13NilaiPtsPas::where('pembelajaran_id', $pembelajaran->id)->where('anggota_kelas_id', $anggota_kelas->id)->first();
                             $rencana_bobot_penilaian = K13RencanaBobotPenilaian::where('pembelajaran_id', $pembelajaran->id)->first();
 
-                            $rata_nilai_pengetahuan = $data_nilai_pengetahuan->sum('nilai_pengetahuan') / $data_nilai_pengetahuan->sum('bobot_penilaian');
-                            $nilai_akhir_pengetahuan = (($rata_nilai_pengetahuan * $rencana_bobot_penilaian->bobot_ph) + ($nilai_pts_pas->nilai_pts * $rencana_bobot_penilaian->bobot_pts) + ($nilai_pts_pas->nilai_pas * $rencana_bobot_penilaian->bobot_pas)) / ($rencana_bobot_penilaian->bobot_ph + $rencana_bobot_penilaian->bobot_pts + $rencana_bobot_penilaian->bobot_pas);
+                            $rata_nilai_pengetahuan = $data_nilai_pengetahuan->sum('bobot_penilaian') != 0
+                            ? $data_nilai_pengetahuan->sum('nilai_pengetahuan') / $data_nilai_pengetahuan->sum('bobot_penilaian')
+                            : 0;
+                        
+                        // Cek apakah $nilai_pts_pas null, kalau iya beri nilai default 0
+                        $nilai_pts = $nilai_pts_pas ? $nilai_pts_pas->nilai_pts : 0;
+                        $nilai_pas = $nilai_pts_pas ? $nilai_pts_pas->nilai_pas : 0;
+                        
+                        // Cek apakah total bobot tidak 0 agar tidak terjadi pembagian nol
+                        $total_bobot = $rencana_bobot_penilaian->bobot_ph + $rencana_bobot_penilaian->bobot_pts + $rencana_bobot_penilaian->bobot_pas;
+                        
+                        $nilai_akhir_pengetahuan = $total_bobot != 0
+                            ? (
+                                ($rata_nilai_pengetahuan * $rencana_bobot_penilaian->bobot_ph) +
+                                ($nilai_pts * $rencana_bobot_penilaian->bobot_pts) +
+                                ($nilai_pas * $rencana_bobot_penilaian->bobot_pas)
+                              ) / $total_bobot
+                            : 0;
+                        
                             // Akhir Olah Nilai Pengetahuan
 
                             $nilai_keterampilan = K13NilaiKeterampilan::whereIn('k13_rencana_nilai_keterampilan_id', $rencana_nilai_keterampilan)->where('anggota_kelas_id', $anggota_kelas->id)->avg('nilai');

@@ -110,6 +110,32 @@ Route::middleware(['auth'])->group(function () {
     });
     // End Route User Admin
 
+    // Route Kepala Sekolah
+    Route::middleware('checkRole:4')->group(function () {
+        Route::prefix('kepalasekolah')->group(function () {
+            Route::resource('profile', Controllers\KepalaSekolah\ProfileController::class)->only(['edit', 'update']);
+        });
+            Route::resource('rekapkehadiran', Controllers\KepalaSekolah\RekapKehadiranSiswaController::class)->only(['index', 'store']);
+
+              // Raport K13 Kepala Sekolah
+              Route::middleware('checkKurikulum:2013')->group(function () {
+
+                // Setting Raport K13
+                Route::resource('k13validasi', Controllers\KepalaSekolah\K13\ValidasiController::class)->only(['index']);
+
+                // Hasil Raport K13
+                Route::resource('k13statuspenilaian', Controllers\KepalaSekolah\K13\StatusPenilaianController::class)->only(['index', 'store']);
+                Route::resource('k13pengelolaannilai', Controllers\KepalaSekolah\K13\PengelolaanNilaiController::class)->only(['index', 'store']);
+                Route::resource('k13nilairaport', Controllers\KepalaSekolah\K13\NilaiRaportSemesterController::class)->only(['index', 'store']);
+                Route::resource('k13leger', Controllers\KepalaSekolah\K13\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
+                Route::resource('k13raportpts', Controllers\KepalaSekolah\K13\CetakRaportPTSController::class)->only(['index', 'store', 'show']);
+                Route::resource('k13raportsemester', Controllers\KepalaSekolah\K13\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
+            });
+            // End  Raport K13 Kepala Sekolah
+    });
+
+ 
+
     // Route User Guru
     Route::middleware('checkRole:2')->group(function () {
         Route::prefix('guru')->group(function () {

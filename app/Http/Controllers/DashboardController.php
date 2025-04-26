@@ -248,6 +248,40 @@ class DashboardController extends Controller
                 'jumlah_ekstrakulikuler',
                 'jumlah_mapel',
             ));
+        }elseif (Auth::user()->role == 4) {
+            $jumlah_guru = Guru::all()->count();
+            $jumlah_siswa = Siswa::where('status', 1)->count();
+            $jumlah_kelas = Kelas::where('tapel_id', $tapel->id)->count();
+            $jumlah_ekstrakulikuler = Ekstrakulikuler::where('tapel_id', $tapel->id)->count();
+
+            return view('dashboard.kepalasekolah', compact(
+                'title',
+                'data_pengumuman',
+                'data_riwayat_login',
+                'sekolah',
+                'tapel',
+                'jumlah_guru',
+                'jumlah_siswa',
+                'jumlah_kelas',
+                'jumlah_ekstrakulikuler',
+            ));
+        }elseif (Auth::user()->role == 5) {
+            $jumlah_guru = Guru::all()->count();
+            $jumlah_siswa = Siswa::where('status', 1)->count();
+            $jumlah_kelas = Kelas::where('tapel_id', $tapel->id)->count();
+            $jumlah_ekstrakulikuler = Ekstrakulikuler::where('tapel_id', $tapel->id)->count();
+
+            return view('dashboard.wakilkurikulum', compact(
+                'title',
+                'data_pengumuman',
+                'data_riwayat_login',
+                'sekolah',
+                'tapel',
+                'jumlah_guru',
+                'jumlah_siswa',
+                'jumlah_kelas',
+                'jumlah_ekstrakulikuler',
+            ));
         }
     }
 }
