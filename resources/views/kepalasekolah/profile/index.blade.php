@@ -62,7 +62,7 @@
               <h3 class="card-title"><i class="fas fa-user"></i> Data Pribadi</h3>
             </div><!-- /.card-header -->
             <div class="card-body">
-              <form action="{{ route('profileguru.update', $guru->id) }}" method="POST" enctype="multipart/form-data">
+              <form action="{{ route('profilekepalasekolah.update', $guru->id) }}" method="POST" enctype="multipart/form-data">
                 @method('put')
                 @csrf
                 <div class="form-group row">

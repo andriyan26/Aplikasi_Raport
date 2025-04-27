@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('ekstrakulikuler/anggota/{anggota}', [Controllers\Admin\EkstrakulikulerController::class, 'delete_anggota'])->name('ekstrakulikuler.anggota.delete');
             Route::resource('ekstrakulikuler', Controllers\Admin\EkstrakulikulerController::class)->only(['index', 'store', 'show', 'destroy']);
 
-            Route::resource('rekapkehadiran', Controllers\Admin\RekapKehadiranSiswaController::class)->only(['index', 'store']);
+            Route::resource('adminrekapkehadiran', Controllers\Admin\RekapKehadiranSiswaController::class)->only(['index', 'store']);
 
             Route::get('getKelas/ajax/{id}', [Controllers\AjaxController::class, 'ajax_kelas']);
 
@@ -72,15 +72,15 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('k13sikap', Controllers\Admin\K13\ButirSikapController::class)->only(['index', 'store', 'update',]);
                 Route::resource('k13kd', Controllers\Admin\K13\KdMapelController::class)->only(['index', 'create', 'store', 'update', 'destroy']);
                 Route::resource('k13tglraport', Controllers\Admin\K13\TglRaportController::class)->only(['index', 'store', 'update', 'destroy']);
-                Route::resource('k13validasi', Controllers\Admin\K13\ValidasiController::class)->only(['index']);
+                Route::resource('admink13validasi', Controllers\Admin\K13\ValidasiController::class)->only(['index']);
 
                 // Hasil Raport K13
-                Route::resource('k13statuspenilaian', Controllers\Admin\K13\StatusPenilaianController::class)->only(['index', 'store']);
-                Route::resource('k13pengelolaannilai', Controllers\Admin\K13\PengelolaanNilaiController::class)->only(['index', 'store']);
-                Route::resource('k13nilairaport', Controllers\Admin\K13\NilaiRaportSemesterController::class)->only(['index', 'store']);
-                Route::resource('k13leger', Controllers\Admin\K13\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
-                Route::resource('k13raportpts', Controllers\Admin\K13\CetakRaportPTSController::class)->only(['index', 'store', 'show']);
-                Route::resource('k13raportsemester', Controllers\Admin\K13\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
+                Route::resource('admink13statuspenilaian', Controllers\Admin\K13\StatusPenilaianController::class)->only(['index', 'store']);
+                Route::resource('admink13pengelolaannilai', Controllers\Admin\K13\PengelolaanNilaiController::class)->only(['index', 'store']);
+                Route::resource('admink13nilairaport', Controllers\Admin\K13\NilaiRaportSemesterController::class)->only(['index', 'store']);
+                Route::resource('admink13leger', Controllers\Admin\K13\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
+                Route::resource('admink13raportpts', Controllers\Admin\K13\CetakRaportPTSController::class)->only(['index', 'store', 'show']);
+                Route::resource('admink13raportsemester', Controllers\Admin\K13\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
             });
             // End  Raport K13 Admin
 
@@ -94,15 +94,16 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('kkm', Controllers\Admin\KTSP\KkmMapelController::class)->only(['index', 'store', 'update', 'destroy']);
                 Route::resource('interval', Controllers\Admin\KTSP\IntervalPredikatController::class)->only(['index']);
                 Route::resource('tglraport', Controllers\Admin\KTSP\TglRaportController::class)->only(['index', 'store', 'update', 'destroy']);
-                Route::resource('validasi', Controllers\Admin\KTSP\ValidasiController::class)->only(['index']);
+                Route::resource('adminvalidasi', Controllers\Admin\KTSP\ValidasiController::class)->only(['index']);
 
-                // Hasil Raport K13
-                Route::resource('ktspstatuspenilaian', Controllers\Admin\KTSP\StatusPenilaianController::class)->only(['index', 'store']);
-                Route::resource('ktsppengelolaannilai', Controllers\Admin\KTSP\PengelolaanNilaiController::class)->only(['index', 'store']);
-                Route::resource('ktspnilairaport', Controllers\Admin\KTSP\NilaiRaportSemesterController::class)->only(['index', 'store']);
-                Route::resource('ktspleger', Controllers\Admin\KTSP\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
-                Route::resource('ktspraportuts', Controllers\Admin\KTSP\CetakRaportUTSController::class)->only(['index', 'store', 'show']);
-                Route::resource('ktspraportsemester', Controllers\Admin\KTSP\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
+                // Hasil Raport KTSP
+                Route::resource('adminktspstatuspenilaian', Controllers\Admin\KTSP\StatusPenilaianController::class)->only(['index', 'store']);
+                Route::resource('adminktsppengelolaannilai', Controllers\Admin\KTSP\PengelolaanNilaiController::class)->only(['index', 'store']);
+                Route::resource('adminktspnilairaport', Controllers\Admin\KTSP\NilaiRaportSemesterController::class)->only(['index', 'store']);
+                Route::resource('adminktspleger', Controllers\Admin\KTSP\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
+                Route::resource('adminktspraportuts', Controllers\Admin\KTSP\CetakRaportUTSController::class)->only(['index', 'store', 'show']);
+                Route::resource('adminktspraportsemester', Controllers\Admin\KTSP\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
+            
             });
             // End  Raport KTSP Admin
 
@@ -113,8 +114,9 @@ Route::middleware(['auth'])->group(function () {
     // Route Kepala Sekolah
     Route::middleware('checkRole:4')->group(function () {
         Route::prefix('kepalasekolah')->group(function () {
-            Route::resource('profile', Controllers\KepalaSekolah\ProfileController::class)->only(['edit', 'update']);
-        });
+
+            Route::resource('profilekepalasekolah', Controllers\KepalaSekolah\ProfileController::class)->only(['update']);
+        
             Route::resource('rekapkehadiran', Controllers\KepalaSekolah\RekapKehadiranSiswaController::class)->only(['index', 'store']);
 
               // Raport K13 Kepala Sekolah
@@ -130,8 +132,22 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('k13leger', Controllers\KepalaSekolah\K13\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
                 Route::resource('k13raportpts', Controllers\KepalaSekolah\K13\CetakRaportPTSController::class)->only(['index', 'store', 'show']);
                 Route::resource('k13raportsemester', Controllers\KepalaSekolah\K13\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
+            }); // End  Raport K13 Kepala Sekolah
+            
+             // Raport KTSP Admin
+             Route::middleware('checkKurikulum:2006')->group(function () {
+
+                Route::resource('validasi', Controllers\KepalaSekolah\KTSP\ValidasiController::class)->only(['index']);
+
+                // Hasil Raport K13
+                Route::resource('ktspstatuspenilaian', Controllers\KepalaSekolah\KTSP\StatusPenilaianController::class)->only(['index', 'store']);
+                Route::resource('ktsppengelolaannilai', Controllers\KepalaSekolah\KTSP\PengelolaanNilaiController::class)->only(['index', 'store']);
+                Route::resource('ktspnilairaport', Controllers\KepalaSekolah\KTSP\NilaiRaportSemesterController::class)->only(['index', 'store']);
+                Route::resource('ktspleger', Controllers\KepalaSekolah\KTSP\LegerNilaiSiswaController::class)->only(['index', 'store', 'show']);
+                Route::resource('ktspraportuts', Controllers\KepalaSekolah\KTSP\CetakRaportUTSController::class)->only(['index', 'store', 'show']);
+                Route::resource('ktspraportsemester', Controllers\KepalaSekolah\KTSP\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
             });
-            // End  Raport K13 Kepala Sekolah
+        }); 
     });
 
  
