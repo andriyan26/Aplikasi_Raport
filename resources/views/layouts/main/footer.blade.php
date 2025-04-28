@@ -1,6 +1,6 @@
 <!-- Main Footer -->
 <footer class="main-footer">
-  <strong> &copy;  <a href="https://qkohst.github.io/" target="_black"></a></strong>
+  <strong> &copy;  <a href="" target="_black"></a></strong>
   
   <div class="float-right d-none d-sm-inline-block">
     <b></b> 

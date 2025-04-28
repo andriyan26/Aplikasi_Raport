@@ -18,8 +18,8 @@
     </div>
 
     <div class="lockscreen-footer text-center">
-      Copyright &copy; 2021 | <a href="https://qkohst.github.io/" target="_black">Qkoh St</a>.</strong>
-      Theme by AdminLTE <br> <b>E</b>-Raport | Versi 1.0
+       &copy;   <a href="" target="_black">Andrian</a></strong>
+      Theme by Admin <br> <b> Raport </b>Digital Siswa
     </div>
   </div>
 

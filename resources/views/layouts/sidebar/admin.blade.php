@@ -128,7 +128,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('k13sikap.index') }}" class="nav-link">
+          <a href="{{ route('admink13sikap.index') }}" class="nav-link">
             <i class="nav-icon fas fa-clipboard"></i>
             <p>
               Butir-Butir Sikap
@@ -154,7 +154,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="{{ route('k13validasi.index') }}" class="nav-link">
+          <a href="{{ route('admink13validasi.index') }}" class="nav-link">
             <i class="nav-icon fas fa-check-square"></i>
             <p>
               Validasi Data
@@ -192,7 +192,6 @@
             </li>
           </ul>
         </li>
-
 
         <li class="nav-item">
           <a href="{{ route('rekapkehadiran.index') }}" class="nav-link">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KepalaSekolah\K13;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKelas;
+use App\Models\Guru;
 use App\Models\K13KkmMapel;
 use App\Models\K13MappingMapel;
 use App\Models\K13NilaiKeterampilan;
@@ -15,7 +16,9 @@ use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Pembelajaran;
 use App\Models\Sekolah;
+use App\Models\Tapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class CetakRaportPTSController extends Controller
@@ -28,9 +31,9 @@ class CetakRaportPTSController extends Controller
     public function index()
     {
         $title = 'Raport Tengah Semester';
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
-        return view('kepalasekolah.k13.raportpts.setpaper', compact('title', 'data_kelas'));
+        return view('kepalasekolah.k13.raportpts.setpaper', compact('title'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,14 +44,15 @@ class CetakRaportPTSController extends Controller
     public function store(Request $request)
     {
         $title = 'Raport Tengah Semester';
-        $kelas = Kelas::findorfail($request->kelas_id);
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
-        $data_anggota_kelas = AnggotaKelas::where('kelas_id', $kelas->id)->get();
+        $tapel = Tapel::findorfail(session()->get('tapel_id'));
+        $guru = Guru::where('user_id', Auth::user()->id)->first();
+        $id_kelas_diampu = Kelas::where('tapel_id', $tapel->id)->where('guru_id', $guru->id)->get('id');
+        $data_anggota_kelas = AnggotaKelas::whereIn('kelas_id', $id_kelas_diampu)->get();
 
         $paper_size = $request->paper_size;
         $orientation = $request->orientation;
 
-        return view('kepalasekolah.k13.raportpts.index', compact('title', 'kelas', 'data_kelas', 'data_anggota_kelas', 'paper_size', 'orientation'));
+        return view('kepalasekolah.k13.raportpts.index', compact('title', 'data_anggota_kelas', 'paper_size', 'orientation'));
     }
 
     /**
@@ -134,7 +138,7 @@ class CetakRaportPTSController extends Controller
             }
         }
 
-        $raport = PDF::loadview('walikelas.k13.raportpts.raport', compact('title', 'sekolah', 'anggota_kelas', 'data_pembelajaran_a', 'data_pembelajaran_b'))->setPaper($request->paper_size, $request->orientation);
+        $raport = PDF::loadview('kepalasekolah.k13.raportpts.raport', compact('title', 'sekolah', 'anggota_kelas', 'data_pembelajaran_a', 'data_pembelajaran_b'))->setPaper($request->paper_size, $request->orientation);
         return $raport->stream('RAPORT PTS ' . $anggota_kelas->siswa->nama_lengkap . ' (' . $anggota_kelas->kelas->nama_kelas . ').pdf');
     }
 }

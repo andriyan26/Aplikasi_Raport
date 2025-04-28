@@ -7,6 +7,7 @@ use App\Models\AnggotaEkstrakulikuler;
 use App\Models\AnggotaKelas;
 use App\Models\CatatanWaliKelas;
 use App\Models\Ekstrakulikuler;
+use App\Models\Guru;
 use App\Models\K13DeskripsiSikapSiswa;
 use App\Models\K13MappingMapel;
 use App\Models\K13NilaiAkhirRaport;
@@ -18,7 +19,9 @@ use App\Models\NilaiEkstrakulikuler;
 use App\Models\Pembelajaran;
 use App\Models\PrestasiSiswa;
 use App\Models\Sekolah;
+use App\Models\Tapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class CetakRaportSemesterController extends Controller
@@ -31,8 +34,7 @@ class CetakRaportSemesterController extends Controller
     public function index()
     {
         $title = 'Cetak Raport Semester';
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
-        return view('kepalasekolah.k13.raportsemester.setpaper', compact('title', 'data_kelas'));
+        return view('kepalasekolah.k13.raportsemester.setpaper', compact('title'));
     }
 
     /**
@@ -44,14 +46,15 @@ class CetakRaportSemesterController extends Controller
     public function store(Request $request)
     {
         $title = 'Cetak Raport Semester';
-        $kelas = Kelas::findorfail($request->kelas_id);
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
-        $data_anggota_kelas = AnggotaKelas::where('kelas_id', $kelas->id)->get();
+        $tapel = Tapel::findorfail(session()->get('tapel_id'));
+        $guru = Guru::where('user_id', Auth::user()->id)->first();
+        $id_kelas_diampu = Kelas::where('tapel_id', $tapel->id)->where('guru_id', $guru->id)->get('id');
+        $data_anggota_kelas = AnggotaKelas::whereIn('kelas_id', $id_kelas_diampu)->get();
 
         $paper_size = $request->paper_size;
         $orientation = $request->orientation;
 
-        return view('kepalasekolah.k13.raportsemester.index', compact('title', 'kelas', 'data_kelas', 'data_anggota_kelas', 'paper_size', 'orientation'));
+        return view('kepalasekolah.k13.raportsemester.index', compact('title', 'data_anggota_kelas', 'paper_size', 'orientation'));
     }
 
     /**
@@ -104,7 +107,7 @@ class CetakRaportSemesterController extends Controller
             if (is_null($cek_tanggal_raport)) {
                 return back()->with('toast_warning', 'Tanggal raport belum disetting oleh admin');
             } else {
-                $raport = PDF::loadview('walikelas.k13.raportsemester.raport', compact('title', 'sekolah', 'anggota_kelas', 'deskripsi_sikap', 'data_nilai_kelompok_a', 'data_nilai_kelompok_b', 'data_anggota_ekstrakulikuler', 'data_prestasi_siswa', 'kehadiran_siswa', 'catatan_wali_kelas'))->setPaper($request->paper_size, $request->orientation);
+                $raport = PDF::loadview('kepalasekolah.k13.raportsemester.raport', compact('title', 'sekolah', 'anggota_kelas', 'deskripsi_sikap', 'data_nilai_kelompok_a', 'data_nilai_kelompok_b', 'data_anggota_ekstrakulikuler', 'data_prestasi_siswa', 'kehadiran_siswa', 'catatan_wali_kelas'))->setPaper($request->paper_size, $request->orientation);
                 return $raport->stream('RAPORT ' . $anggota_kelas->siswa->nama_lengkap . ' (' . $anggota_kelas->kelas->nama_kelas . ').pdf');
             }
         }

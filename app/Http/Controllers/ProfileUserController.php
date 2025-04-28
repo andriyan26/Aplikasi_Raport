@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Siswa;
+use App\Models\KepalaSekolah;
+
 use Illuminate\Support\Facades\Auth;
 
 class ProfileUserController extends Controller
@@ -17,6 +19,7 @@ class ProfileUserController extends Controller
     public function index()
     {
         $title = 'Profile';
+
         if (Auth::user()->role == 1) {
             $admin = Admin::where('user_id', Auth::user()->id)->first();
             return view('admin.profile.index', compact('title', 'admin'));
@@ -26,6 +29,12 @@ class ProfileUserController extends Controller
         } elseif (Auth::user()->role == 3) {
             $siswa = Siswa::where('user_id', Auth::user()->id)->first();
             return view('siswa.profile.index', compact('title', 'siswa'));
+        } elseif (Auth::user()->role == 4) {
+            $kepalaSekolah = \App\Models\KepalaSekolah::where('user_id', Auth::user()->id)->first();
+            return view('kepalasekolah.profile.index', compact('title', 'kepalaSekolah'));
+        } elseif (Auth::user()->role == 5) {
+            $wakilKurikulum = \App\Models\WakilKurikulum::where('user_id', Auth::user()->id)->first();
+            return view('wakilkurikulum.profile.index', compact('title', 'wakilKurikulum'));
         }
     }
 }

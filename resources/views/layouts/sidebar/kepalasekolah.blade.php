@@ -19,65 +19,28 @@
             </p>
           </a>
         </li>
-
+        <li class="nav-item">
+          <a href="{{ route('kepsekpesertadidik.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Data Peserta Didik
+            </p>
+          </a>
+        </li>
 
         @if(Session::get('kurikulum') == '2013')
-
         <!-- Kurikulum 2013 -->
-        <li class="nav-header">SETTING RAPORT K-2013</li>
-
         <li class="nav-item">
-          <a href="{{ route('k13validasi.index') }}" class="nav-link">
+          <a href="{{ route('kepsekk13validasi.index') }}" class="nav-link">
             <i class="nav-icon fas fa-check-square"></i>
             <p>
-              Validasi Data
-            </p>
-          </a>
-        </li>
-
-        <li class="nav-header">HASIL RAPORT K-2013</li>
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-list-ol"></i>
-            <p>
-              Hasil Penilaian
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview bg-secondary">
-            <li class="nav-item">
-              <a href="{{ route('k13statuspenilaian.index') }}" class="nav-link">
-                <i class="fas fa-check-circle nav-icon"></i>
-                <p>Status Penilaian</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('k13pengelolaannilai.index') }}" class="nav-link">
-                <i class="fas fa-check-square nav-icon"></i>
-                <p>Hasil Pengelolaan Nilai</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('k13nilairaport.index') }}" class="nav-link">
-                <i class="fas fa-clipboard-check nav-icon"></i>
-                <p>Nilai Raport Semester</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-
-        <li class="nav-item">
-          <a href="{{ route('rekapkehadiran.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-calendar-check"></i>
-            <p>
-              Rekap Kehadiran Siswa
+              Cek Validasi Data
             </p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{ route('k13leger.index') }}" class="nav-link">
+          <a href="{{ route('kepsekleger.index') }}" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
               Leger Nilai Siswa
@@ -95,13 +58,13 @@
           </a>
           <ul class="nav nav-treeview bg-secondary">
             <li class="nav-item">
-              <a href="{{ route('k13raportpts.index') }}" class="nav-link">
+              <a href="{{ route('kepsekraportpts.index') }}" class=" nav-link">
                 <i class="fas fa-print nav-icon"></i>
                 <p>Raport Tengah Semester</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('k13raportsemester.index') }}" class="nav-link">
+              <a href="{{ route('kepsekraportsemester.index') }}" class="nav-link">
                 <i class="fas fa-print nav-icon"></i>
                 <p>Raport Semester</p>
               </a>

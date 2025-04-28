@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\KepalaSekolah\K13;
 
-use App\Exports\AdminK13LegerNilaiExport;
+use App\Exports\WaliKelasLegerNilaiExport;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaEkstrakulikuler;
 use App\Models\AnggotaKelas;
@@ -16,9 +16,9 @@ use App\Models\NilaiEkstrakulikuler;
 use App\Models\Pembelajaran;
 use App\Models\Tapel;
 use Excel;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class LegerNilaiSiswaController extends Controller
+class LihatLegerNilaiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,91 +28,79 @@ class LegerNilaiSiswaController extends Controller
     public function index()
     {
         $title = 'Leger Nilai Siswa';
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
-        return view('kepalasekolah.k13.leger.pilihkelas', compact('title', 'data_kelas'));
-    }
+        
+        // Ambil data Tapel berdasarkan session
+        $tapel = Tapel::findOrFail(session()->get('tapel_id'));
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $title = 'Leger Nilai Siswa';
-        $tapel = Tapel::findorfail(session()->get('tapel_id'));
-        $kelas = Kelas::findorfail($request->kelas_id);
-        $data_kelas = Kelas::where('tapel_id', session()->get('tapel_id'))->get();
+        // Ambil ID kelas yang terkait dengan tapel
+        $id_kelas_diampu = Kelas::where('tapel_id', $tapel->id)->pluck('id');
+        
+        // Ambil data Mapel untuk semester ini berdasarkan tapel
+        $data_id_mapel_semester_ini = Mapel::where('tapel_id', $tapel->id)->pluck('id');
+        
+        // Ambil data mapel berdasarkan kelompok A dan B
+        $data_id_mapel_kelompok_a = K13MappingMapel::whereIn('mapel_id', $data_id_mapel_semester_ini)->where('kelompok', 'A')->pluck('mapel_id');
+        $data_id_mapel_kelompok_b = K13MappingMapel::whereIn('mapel_id', $data_id_mapel_semester_ini)->where('kelompok', 'B')->pluck('mapel_id');
+        
+        // Ambil data pembelajaran
+        $data_id_pembelajaran_all = Pembelajaran::whereIn('kelas_id', $id_kelas_diampu)->pluck('id');
+        $data_id_pembelajaran_a = Pembelajaran::whereIn('kelas_id', $id_kelas_diampu)->whereIn('mapel_id', $data_id_mapel_kelompok_a)->pluck('id');
+        $data_id_pembelajaran_b = Pembelajaran::whereIn('kelas_id', $id_kelas_diampu)->whereIn('mapel_id', $data_id_mapel_kelompok_b)->pluck('id');
 
-        $data_id_mapel_semester_ini = Mapel::where('tapel_id', $tapel->id)->get('id');
-
-        $data_id_mapel_kelompok_a = K13MappingMapel::whereIn('mapel_id', $data_id_mapel_semester_ini)->where('kelompok', 'A')->get('mapel_id');
-        $data_id_mapel_kelompok_b = K13MappingMapel::whereIn('mapel_id', $data_id_mapel_semester_ini)->where('kelompok', 'B')->get('mapel_id');
-
-        $data_id_pembelajaran_all = Pembelajaran::where('kelas_id', $kelas->id)->get('id');
-        $data_id_pembelajaran_a = Pembelajaran::where('kelas_id', $kelas->id)->whereIn('mapel_id', $data_id_mapel_kelompok_a)->get('id');
-        $data_id_pembelajaran_b = Pembelajaran::where('kelas_id', $kelas->id)->whereIn('mapel_id', $data_id_mapel_kelompok_b)->get('id');
-
+        // Ambil nilai akhir raport
         $data_mapel_kelompok_a = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_a)->groupBy('pembelajaran_id')->get();
         $data_mapel_kelompok_b = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_b)->groupBy('pembelajaran_id')->get();
 
+        // Ambil data ekstrakurikuler
         $data_ekstrakulikuler = Ekstrakulikuler::where('tapel_id', $tapel->id)->get();
         $count_ekstrakulikuler = count($data_ekstrakulikuler);
 
-        $data_anggota_kelas = AnggotaKelas::where('kelas_id', $kelas->id)->get();
+        // Ambil data anggota kelas
+        $data_anggota_kelas = AnggotaKelas::whereIn('kelas_id', $id_kelas_diampu)->get();
         foreach ($data_anggota_kelas as $anggota_kelas) {
-
+            // Ambil nilai untuk kelompok A dan B
             $data_nilai_kelompok_a = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_a)->where('anggota_kelas_id', $anggota_kelas->id)->get();
             $data_nilai_kelompok_b = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_b)->where('anggota_kelas_id', $anggota_kelas->id)->get();
 
             $anggota_kelas->data_nilai_kelompok_a = $data_nilai_kelompok_a;
             $anggota_kelas->data_nilai_kelompok_b = $data_nilai_kelompok_b;
 
+            // Rata-rata pengetahuan dan keterampilan
             $rt_pengetahuan = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_all)->where('anggota_kelas_id', $anggota_kelas->id)->avg('nilai_pengetahuan');
             $rt_keterampilan = K13NilaiAkhirRaport::whereIn('pembelajaran_id', $data_id_pembelajaran_all)->where('anggota_kelas_id', $anggota_kelas->id)->avg('nilai_keterampilan');
 
             $anggota_kelas->rata_rata_pengetahuan = round($rt_pengetahuan, 0);
             $anggota_kelas->rata_rata_keterampilan = round($rt_keterampilan, 0);
 
+            // Cek deskripsi sikap siswa
             $cek_deskripsi_sikap = K13DeskripsiSikapSiswa::where('anggota_kelas_id', $anggota_kelas->id)->first();
-            if (is_null($cek_deskripsi_sikap)) {
-                $anggota_kelas->nilai_spiritual = '-';
-                $anggota_kelas->nilai_sosial = '-';
-            } else {
+            if ($cek_deskripsi_sikap) {
                 $anggota_kelas->nilai_spiritual = $cek_deskripsi_sikap->nilai_spiritual;
                 $anggota_kelas->nilai_sosial = $cek_deskripsi_sikap->nilai_sosial;
+            } else {
+                $anggota_kelas->nilai_spiritual = '-';
+                $anggota_kelas->nilai_sosial = '-';
             }
 
+            // Ambil nilai ekstrakurikuler
             $anggota_kelas->data_nilai_ekstrakulikuler = Ekstrakulikuler::where('tapel_id', $tapel->id)->get();
-
             foreach ($anggota_kelas->data_nilai_ekstrakulikuler as $data_nilai_ekstrakulikuler) {
                 $cek_anggota_ekstra = AnggotaEkstrakulikuler::where('ekstrakulikuler_id', $data_nilai_ekstrakulikuler->id)->where('anggota_kelas_id', $anggota_kelas->id)->first();
-                if (is_null($cek_anggota_ekstra)) {
-                    $data_nilai_ekstrakulikuler->nilai = '-';
-                } else {
+                if ($cek_anggota_ekstra) {
                     $cek_nilai_ekstra = NilaiEkstrakulikuler::where('ekstrakulikuler_id', $data_nilai_ekstrakulikuler->id)->where('anggota_ekstrakulikuler_id', $cek_anggota_ekstra->id)->first();
-                    if (is_null($cek_nilai_ekstra)) {
-                        $data_nilai_ekstrakulikuler->nilai = '-';
-                    } else {
-                        $data_nilai_ekstrakulikuler->nilai = $cek_nilai_ekstra->nilai;
-                    }
+                    $data_nilai_ekstrakulikuler->nilai = $cek_nilai_ekstra ? $cek_nilai_ekstra->nilai : '-';
+                } else {
+                    $data_nilai_ekstrakulikuler->nilai = '-';
                 }
             }
         }
-        return view('kepalasekolah.k13.leger.index', compact('title', 'kelas', 'data_kelas', 'data_mapel_kelompok_a', 'data_mapel_kelompok_b', 'data_ekstrakulikuler', 'count_ekstrakulikuler', 'data_anggota_kelas'));
+
+        return view('kepalasekolah.k13.leger.index', compact('title', 'data_mapel_kelompok_a', 'data_mapel_kelompok_b', 'data_ekstrakulikuler', 'count_ekstrakulikuler', 'data_anggota_kelas'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function export()
     {
-        $kelas = Kelas::findorfail($id);
-        $filename = 'leger_nilai_k13_siswa_kelas ' . $kelas->nama_kelas . ' ' . date('Y-m-d H_i_s') . '.xls';
-        return Excel::download(new AdminK13LegerNilaiExport($id), $filename);
+        $filename = 'leger_nilai_siswa_k13 ' . date('Y-m-d H_i_s') . '.xls';
+        return Excel::download(new WaliKelasLegerNilaiExport, $filename);
     }
 }

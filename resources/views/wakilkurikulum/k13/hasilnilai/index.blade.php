@@ -1,5 +1,5 @@
 @include('layouts.main.header')
-@include('layouts.sidebar.kepalasekolah')
+@include('layouts.sidebar.wakilkurikulum')
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -32,25 +32,8 @@
               <h3 class="card-title"><i class="fas fa-check-square"></i> {{$title}}</h3>
             </div>
             <div class="card-body">
-              <div class="callout callout-info">
-                <form action="{{ route('k13pengelolaannilai.store') }}" method="POST">
-                  @csrf
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Kelas</label>
-                    <div class="col-sm-10">
-                      <select class="form-control select2" name="kelas_id" style="width: 100%;" required onchange="this.form.submit();">
-                        <option value="" disabled>-- Pilih Kelas --</option>
-                        @foreach($data_kelas->sortBy('tingkatan_kelas') as $kls)
-                        <option value="{{$kls->id}}" @if($kls->id == $kelas->id) selected @endif>{{$kls->nama_kelas}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
               <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover">
+                <table class="table table-bordered table-striped">
                   <thead class="bg-info">
                     <tr>
                       <th class="text-center" style="width: 5%;">No</th>
@@ -141,11 +124,11 @@
                                           <tr class="bg-light">
                                             <td colspan="7"><strong>Kelompok A</strong></td>
                                           </tr>
-                                          <?php $no = 0; ?>
+                                          <?php $no_a = 0; ?>
                                           @foreach($anggota_kelas->data_nilai_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_a)
-                                          <?php $no++; ?>
+                                          <?php $no_a++; ?>
                                           <tr class="bg-white">
-                                            <td class="text-center">{{$no}}</td>
+                                            <td class="text-center">{{$no_a}}</td>
                                             <td>{{$nilai_kelompok_a->pembelajaran->mapel->nama_mapel}}</td>
                                             <td class="text-center">{{$nilai_kelompok_a->kkm}}</td>
                                             <td class="text-center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
@@ -160,11 +143,11 @@
                                           <tr class="bg-light">
                                             <td colspan="7"><strong>Kelompok B</strong></td>
                                           </tr>
-                                          <?php $no = 0; ?>
+                                          <?php $no_b = 0; ?>
                                           @foreach($anggota_kelas->data_nilai_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_b)
-                                          <?php $no++; ?>
+                                          <?php $no_b++; ?>
                                           <tr class="bg-white">
-                                            <td class="text-center">{{$no}}</td>
+                                            <td class="text-center">{{$no_b}}</td>
                                             <td>{{$nilai_kelompok_b->pembelajaran->mapel->nama_mapel}}</td>
                                             <td class="text-center">{{$nilai_kelompok_b->kkm}}</td>
                                             <td class="text-center">{{$nilai_kelompok_b->nilai_pengetahuan}}</td>

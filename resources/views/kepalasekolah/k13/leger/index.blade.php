@@ -30,31 +30,14 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title"><i class="fas fa-table"></i> {{$title}}</h3>
+              <div class="card-tools">
+                <a href="{{ route('leger.export') }}" class="btn btn-tool btn-sm" onclick="return confirm('Download {{$title}} ?')">
+                  <i class="fas fa-download"></i>
+                </a>
+              </div>
             </div>
-
             <div class="card-body">
-              <div class="callout callout-info">
-                <form action="{{ route('k13leger.store') }}" method="POST">
-                  @csrf
-                  <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Kelas</label>
-                    <div class="col-sm-10">
-                      <select class="form-control select2" name="kelas_id" style="width: 100%;" required onchange="this.form.submit();">
-                        <option value="" disabled>-- Pilih Kelas --</option>
-                        @foreach($data_kelas->sortBy('tingkatan_kelas') as $kls)
-                        <option value="{{$kls->id}}" @if($kls->id == $kelas->id) selected @endif>{{$kls->nama_kelas}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <div>
-                <a href="{{ route('k13leger.show', $kelas->id) }}" class="btn btn-primary float-right"><i class="fas fa-download"></i> Download Leger</a>
-              </div>
-
-              <div class="table-responsive pt-3">
+              <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                   <thead class="bg-info">
                     <tr>
@@ -182,8 +165,9 @@
                   </tbody>
                 </table>
               </div>
+              <!-- /.table-responsive -->
             </div>
-
+            <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
