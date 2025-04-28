@@ -30,10 +30,10 @@ class ProfileUserController extends Controller
             $siswa = Siswa::where('user_id', Auth::user()->id)->first();
             return view('siswa.profile.index', compact('title', 'siswa'));
         } elseif (Auth::user()->role == 4) {
-            $kepalaSekolah = \App\Models\KepalaSekolah::where('user_id', Auth::user()->id)->first();
+            $kepalaSekolah = KepalaSekolah::where('user_id', Auth::user()->id)->first();
             return view('kepalasekolah.profile.index', compact('title', 'kepalaSekolah'));
         } elseif (Auth::user()->role == 5) {
-            $wakilKurikulum = \App\Models\WakilKurikulum::where('user_id', Auth::user()->id)->first();
+            $wakilKurikulum = WakilKurikulum::where('user_id', Auth::user()->id)->first();
             return view('wakilkurikulum.profile.index', compact('title', 'wakilKurikulum'));
         }
     }

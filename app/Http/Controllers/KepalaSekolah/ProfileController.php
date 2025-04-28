@@ -31,6 +31,7 @@ class ProfileController extends Controller
             'tanggal_lahir' => 'required|date',
             'nuptk' => 'nullable|digits:16|unique:kepala_sekolah,nuptk,' . $kepalaSekolah->id,
             'alamat' => 'required|min:4|max:255',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi file gambar
         ]);
 
         if ($validator->fails()) {
@@ -51,13 +52,23 @@ class ProfileController extends Controller
 
         // Jika ada file avatar
         if ($request->hasFile('avatar')) {
+            // Hapus avatar lama jika ada
+            if ($kepalaSekolah->avatar && file_exists(public_path('assets/dist/img/avatar_kepala_sekolah/' . $kepalaSekolah->avatar))) {
+                unlink(public_path('assets/dist/img/avatar_kepala_sekolah/' . $kepalaSekolah->avatar));
+            }
+
+            // Ambil file avatar dan buat nama baru untuk file
             $avatar_file = $request->file('avatar');
             $name_avatar = 'profile_' . strtolower(str_replace(' ', '_', $request->nama_lengkap)) . '.' . $avatar_file->getClientOriginalExtension();
+
+            // Pindahkan file ke folder yang diinginkan
             $avatar_file->move(public_path('assets/dist/img/avatar_kepala_sekolah/'), $name_avatar);
+
+            // Update data avatar
             $data['avatar'] = $name_avatar;
         }
 
-        // Update data
+        // Update data kepala sekolah
         $kepalaSekolah->update($data);
 
         return back()->with('toast_success', 'Profil Kepala Sekolah berhasil diperbarui.');

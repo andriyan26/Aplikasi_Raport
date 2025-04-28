@@ -128,7 +128,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{ route('admink13sikap.index') }}" class="nav-link">
+          <a href="{{ route('k13sikap.index') }}" class="nav-link">
             <i class="nav-icon fas fa-clipboard"></i>
             <p>
               Butir-Butir Sikap

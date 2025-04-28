@@ -71,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('k13sikap/import', [Controllers\Admin\K13\ButirSikapController::class, 'format_import'])->name('k13sikap.format_import');
                 Route::post('k13sikap/import', [Controllers\Admin\K13\ButirSikapController::class, 'import'])->name('k13sikap.import');
                 
-                Route::resource('admink13sikap', Controllers\Admin\K13\ButirSikapController::class)->only(['index', 'store', 'update',]);
+                Route::resource('k13sikap', Controllers\Admin\K13\ButirSikapController::class)->only(['index', 'store', 'update',]);
                 Route::resource('k13kd', Controllers\Admin\K13\KdMapelController::class)->only(['index', 'create', 'store', 'update', 'destroy']);
                 Route::resource('k13tglraport', Controllers\Admin\K13\TglRaportController::class)->only(['index', 'store', 'update', 'destroy']);
                 Route::resource('admink13validasi', Controllers\Admin\K13\ValidasiController::class)->only(['index']);
