@@ -9,19 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        // Ambil data kepala sekolah berdasarkan ID
         $kepalaSekolah = KepalaSekolah::findOrFail($id);
 
-        // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_lengkap' => 'required|min:3|max:100',
             'gelar' => 'required|min:2|max:10',
@@ -31,14 +22,13 @@ class ProfileController extends Controller
             'tanggal_lahir' => 'required|date',
             'nuptk' => 'nullable|digits:16|unique:kepala_sekolah,nuptk,' . $kepalaSekolah->id,
             'alamat' => 'required|min:4|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi file gambar
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
             return back()->with('toast_error', $validator->messages()->first())->withInput();
         }
 
-        // Siapkan data untuk update
         $data = [
             'nama_lengkap' => strtoupper($request->nama_lengkap),
             'gelar' => $request->gelar,
@@ -50,25 +40,19 @@ class ProfileController extends Controller
             'alamat' => $request->alamat,
         ];
 
-        // Jika ada file avatar
         if ($request->hasFile('avatar')) {
-            // Hapus avatar lama jika ada
             if ($kepalaSekolah->avatar && file_exists(public_path('assets/dist/img/avatar_kepala_sekolah/' . $kepalaSekolah->avatar))) {
                 unlink(public_path('assets/dist/img/avatar_kepala_sekolah/' . $kepalaSekolah->avatar));
             }
 
-            // Ambil file avatar dan buat nama baru untuk file
             $avatar_file = $request->file('avatar');
-            $name_avatar = 'profile_' . strtolower(str_replace(' ', '_', $request->nama_lengkap)) . '.' . $avatar_file->getClientOriginalExtension();
+            $name_avatar = 'profile_' . strtolower(str_replace(' ', '_', $request->nama_lengkap)) . '_' . time() . '.' . $avatar_file->getClientOriginalExtension();
 
-            // Pindahkan file ke folder yang diinginkan
             $avatar_file->move(public_path('assets/dist/img/avatar_kepala_sekolah/'), $name_avatar);
 
-            // Update data avatar
             $data['avatar'] = $name_avatar;
         }
 
-        // Update data kepala sekolah
         $kepalaSekolah->update($data);
 
         return back()->with('toast_success', 'Profil Kepala Sekolah berhasil diperbarui.');

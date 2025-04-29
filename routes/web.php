@@ -130,9 +130,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('kepsekleger/export', [Controllers\KepalaSekolah\K13\LihatLegerNilaiController::class, 'export'])->name('leger.export');
                 Route::resource('kepsekleger', Controllers\KepalaSekolah\K13\LihatLegerNilaiController::class)->only(['index']);
 
-                Route::resource('kepsekraportpts', Controllers\KepalaSekolah\K13\CetakRaportPTSController::class)->only(['index', 'store', 'show']);
-                Route::resource('kepsekraportsemester', Controllers\KepalaSekolah\K13\CetakRaportSemesterController::class)->only(['index', 'store', 'show']);
-                // Hasil Raport K13
+                Route::resource('kepsekstatusnilaiguru', Controllers\KepalaSekolah\K13\StatusPenilaianGuruController::class)->only(['index']);
+                
 
             }); // End  Raport K13 Kepala Sekolah
             

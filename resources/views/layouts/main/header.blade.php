@@ -57,7 +57,7 @@
             <span class="description">{{ session()->get('akses_sebagai') }}</span>
 
           @elseif (Auth::user()->role == 4)
-            <img class="img-circle" src="/assets/dist/img/avatar/{{ Auth::user()->kepalaSekolah->avatar }}" alt="User Image">
+          <img class="img-circle" src="/assets/dist/img/avatar_kepala_sekolah/{{ Auth::user()->kepalaSekolah->avatar }}" alt="User Image">
             <span class="username">{{ Auth::user()->kepalaSekolah->nama_lengkap }}</span>
             <span class="description">Kepala Sekolah</span>
 

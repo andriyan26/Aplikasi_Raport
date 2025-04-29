@@ -484,21 +484,21 @@
                 @foreach($data_riwayat_login as $riwayat_login)
                 <li class="item">
 
-                  <div class="product-img">
+                <div class="product-img">
                     @if($riwayat_login->user->role == 1)
-                      <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->admin)->avatar }}" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->admin)->avatar ?? 'default.png' }}" alt="Avatar" class="img-size-50">
                     @elseif($riwayat_login->user->role == 2)
-                      <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->guru)->avatar }}" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->guru)->avatar ?? 'default.png' }}" alt="Avatar" class="img-size-50">
                     @elseif($riwayat_login->user->role == 3)
-                      <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->siswa)->avatar }}" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->siswa)->avatar ?? 'default.png' }}" alt="Avatar" class="img-size-50">
                     @elseif($riwayat_login->user->role == 4)
-                      <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->kepala_sekolah)->avatar }}" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->kepala_sekolah)->avatar ?? 'default.png' }}" alt="Avatar" class="img-size-50">
                     @elseif($riwayat_login->user->role == 5)
-                      <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->wakilkurikulum)->avatar }}" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/{{ optional($riwayat_login->user->wakilkurikulum)->avatar ?? 'default.png' }}" alt="Avatar" class="img-size-50">
                     @else
-                      <img src="assets/dist/img/avatar/default.png" alt="Avatar" class="img-size-50">
+                        <img src="assets/dist/img/avatar/default.png" alt="Avatar" class="img-size-50">
                     @endif
-                  </div>
+                </div>
 
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">
