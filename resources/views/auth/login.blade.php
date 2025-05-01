@@ -34,7 +34,7 @@
             <select class="form-control" name="kurikulum" style="width: 100%;">
               <option value="">-- Pilih Kurikulum Sekolah -- </option>
               <option value="2013">Kurikulum 2013 </option>
-              <option value="2006">Kurikulum 2006 (KTSP) </option>
+              <!-- <option value="2006">Kurikulum 2006 (KTSP) </option> -->
             </select>
           </div>
           <div class="mb-1">

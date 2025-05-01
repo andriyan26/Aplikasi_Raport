@@ -203,17 +203,17 @@
 
                     <span class="product-description">
                       @if($riwayat_login->user->role == 1)
-                          Administrator
+                        Administrator
                       @elseif($riwayat_login->user->role == 2)
-                          Guru
+                        Guru
                       @elseif($riwayat_login->user->role == 3)
-                          Siswa
+                        Siswa
                       @elseif($riwayat_login->user->role == 4)
-                          Kepala Sekolah
+                        Kepala Sekolah
                       @elseif($riwayat_login->user->role == 5)
-                          Wakil Kurikulum
+                        Wakil Kurikulum
                       @else
-                          Tidak Diketahui
+                        Tidak Diketahui
                       @endif
 
                       @if(!$riwayat_login->status_login)

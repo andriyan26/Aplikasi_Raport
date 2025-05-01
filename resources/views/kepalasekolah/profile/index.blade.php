@@ -33,8 +33,8 @@
             <div class="card-body box-profile">
               <div class="text-center">
                 <img class="profile-user-img img-fluid img-circle"
-                   src="{{ asset('assets/dist/img/avatar_kepala_sekolah/' . ($kepalaSekolah->avatar ?? 'default.png')) . '?v=' . time() }}"
-                   alt="Avatar">
+                  src="/assets/dist/img/avatar/{{ Auth::user()->kepalaSekolah->avatar ?? 'default.png' }}"
+                  alt="Avatar">
               </div>
 
               <h3 class="profile-username text-center">{{ $kepalaSekolah->nama_lengkap }}, {{ $kepalaSekolah->gelar }}</h3>

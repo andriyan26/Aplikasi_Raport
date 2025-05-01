@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\KepalaSekolah;
-
-use Illuminate\Support\Facades\Auth;
+use App\Models\WakilKurikulum; // ✅ Tambahkan use ini untuk model WakilKurikulum
 
 class ProfileUserController extends Controller
 {
@@ -23,18 +23,25 @@ class ProfileUserController extends Controller
         if (Auth::user()->role == 1) {
             $admin = Admin::where('user_id', Auth::user()->id)->first();
             return view('admin.profile.index', compact('title', 'admin'));
+
         } elseif (Auth::user()->role == 2) {
             $guru = Guru::where('user_id', Auth::user()->id)->first();
             return view('guru.profile.index', compact('title', 'guru'));
+
         } elseif (Auth::user()->role == 3) {
             $siswa = Siswa::where('user_id', Auth::user()->id)->first();
             return view('siswa.profile.index', compact('title', 'siswa'));
+
         } elseif (Auth::user()->role == 4) {
             $kepalaSekolah = KepalaSekolah::where('user_id', Auth::user()->id)->first();
             return view('kepalasekolah.profile.index', compact('title', 'kepalaSekolah'));
+
         } elseif (Auth::user()->role == 5) {
             $wakilKurikulum = WakilKurikulum::where('user_id', Auth::user()->id)->first();
             return view('wakilkurikulum.profile.index', compact('title', 'wakilKurikulum'));
         }
+
+        // Default jika role tidak sesuai
+        abort(403, 'Unauthorized action.');
     }
 }

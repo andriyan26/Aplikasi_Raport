@@ -23,7 +23,7 @@
         @if(Session::get('kurikulum') == '2013')
 
         <!-- Kurikulum 2013 -->
-        <li class="nav-header">RAPORT K-2013</li>
+        <li class="nav-header">RAPORT </li>
         <li class="nav-item">
           <a href="{{ route('kdk13.index') }}" class="nav-link">
             <i class="nav-icon fas fa-clipboard-list"></i>

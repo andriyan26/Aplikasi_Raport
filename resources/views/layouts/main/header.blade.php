@@ -8,7 +8,7 @@
 
   <title>Raport Digital {{$title}}</title>
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/dist/img/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo/logo-smk-remove.png">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="/assets/plugins/fontawesome-free/css/all.min.css">
@@ -57,7 +57,7 @@
             <span class="description">{{ session()->get('akses_sebagai') }}</span>
 
           @elseif (Auth::user()->role == 4)
-          <img class="img-circle" src="/assets/dist/img/avatar_kepala_sekolah/{{ Auth::user()->kepalaSekolah->avatar }}" alt="User Image">
+          <img class="img-circle" src="/assets/dist/img/avatar/{{ Auth::user()->kepalaSekolah->avatar }}" alt="User Image">
             <span class="username">{{ Auth::user()->kepalaSekolah->nama_lengkap }}</span>
             <span class="description">Kepala Sekolah</span>
 
