@@ -46,7 +46,7 @@
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Tambah {{$title}} </h5>
+                    <h5 class="modal-title">Tambah {{$title}} Admin </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,12 +79,8 @@
                         <label for="role" class="col-sm-3 col-form-label">Role</label>
                         <div class="col-sm-9">
                           <select name="role" class="form-control" id="roleSelect" required>
-                            <option value="">-- Pilih Role --</option>
+                            <option value="">-- Role -- </option>
                             <option value="1">Administrator</option>
-                            <option value="2">Guru</option>
-                            <option value="3">Siswa</option>
-                            <option value="4">Kepala Sekolah</option>
-                            <option value="5">Wakil Kurikulum</option>
                           </select>
                         </div>
                       </div>

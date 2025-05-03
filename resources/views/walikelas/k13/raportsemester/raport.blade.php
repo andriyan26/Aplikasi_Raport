@@ -169,7 +169,7 @@
     <div class="content">
       <table cellspacing="0">
         <tr>
-          <td colspan="6" style="height: 30px;"><strong>B. PENGETAHUAN DAN KETERAMPILAN</strong></td>
+          <td colspan="6" style="height: 40px;"><strong>B. PENGETAHUAN DAN KETERAMPILAN</strong></td>
         </tr>
         <tr class="heading">
           <td rowspan="2" style="width: 5%;">NO</td>
@@ -383,7 +383,7 @@
 
         <!-- EkstraKulikuler  -->
         <tr>
-          <td colspan="4" style="height: 25px;"><strong>C. EKSTRAKULIKULER</strong></td>
+          <td colspan="4" style="height: 45px;"><strong>C. EKSTRAKULIKULER</strong></td>
         </tr>
         <tr class="heading">
           <td style="width: 5%;">NO</td>
