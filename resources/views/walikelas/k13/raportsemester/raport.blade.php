@@ -11,34 +11,34 @@
   <!-- Page 1 Sikap -->
   <div class="invoice-box">
     <div class="header">
-      <table>
+      <table style="width: 100%;">
         <tr>
-          <td style="width: 19%;">Nama Sekolah</td>
-          <td style="width: 52%;">: {{$sekolah->nama_sekolah}}</td>
-          <td style="width: 16%;">Kelas</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
+          <td style="width: 22%;">Nama Sekolah</td>
+          <td style="width: 43%;">: {{$sekolah->nama_sekolah}}</td>
+          <td style="width: 15%;">Kelas</td>
+          <td style="width: 20%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Alamat</td>
-          <td style="width: 52%;">: {{$sekolah->alamat}}</td>
-          <td style="width: 16%;">Semester</td>
-          <td style="width: 13%;">:
+          <td>Alamat</td>
+          <td>: {{$sekolah->alamat}}</td>
+          <td>Semester</td>
+          <td>:
             @if($anggota_kelas->kelas->tapel->semester == 1)
-            1 (Ganjil)
+              1 (Ganjil)
             @else
-            2 (Genap)
+              2 (Genap)
             @endif
           </td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nama Peserta Didik</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nama_lengkap}} </td>
-          <td style="width: 16%;">Tahun Pelajaran</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
+          <td>Nama Peserta Didik</td>
+          <td>: {{$anggota_kelas->siswa->nama_lengkap}}</td>
+          <td>Tahun Pelajaran</td>
+          <td>: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nomor Induk/NISN</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}} </td>
+          <td>Nomor Induk/NISN</td>
+          <td colspan="3">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}}</td>
         </tr>
       </table>
     </div>
@@ -134,34 +134,34 @@
   <!-- Page 2 Pengetahuan  -->
   <div class="invoice-box">
     <div class="header">
-      <table>
+    <table style="width: 100%;">
         <tr>
-          <td style="width: 19%;">Nama Sekolah</td>
-          <td style="width: 52%;">: {{$sekolah->nama_sekolah}}</td>
-          <td style="width: 16%;">Kelas</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
+          <td style="width: 22%;">Nama Sekolah</td>
+          <td style="width: 43%;">: {{$sekolah->nama_sekolah}}</td>
+          <td style="width: 15%;">Kelas</td>
+          <td style="width: 20%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Alamat</td>
-          <td style="width: 52%;">: {{$sekolah->alamat}}</td>
-          <td style="width: 16%;">Semester</td>
-          <td style="width: 13%;">:
+          <td>Alamat</td>
+          <td>: {{$sekolah->alamat}}</td>
+          <td>Semester</td>
+          <td>:
             @if($anggota_kelas->kelas->tapel->semester == 1)
-            1 (Ganjil)
+              1 (Ganjil)
             @else
-            2 (Genap)
+              2 (Genap)
             @endif
           </td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nama Peserta Didik</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nama_lengkap}} </td>
-          <td style="width: 16%;">Tahun Pelajaran</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
+          <td>Nama Peserta Didik</td>
+          <td>: {{$anggota_kelas->siswa->nama_lengkap}}</td>
+          <td>Tahun Pelajaran</td>
+          <td>: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nomor Induk/NISN</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}} </td>
+          <td>Nomor Induk/NISN</td>
+          <td colspan="3">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}}</td>
         </tr>
       </table>
     </div>
@@ -241,40 +241,40 @@
   <!-- Page 3 Keterampilan -->
   <div class="invoice-box">
     <div class="header">
-      <table>
-        <tr>
-          <td style="width: 19%;">Nama Sekolah</td>
-          <td style="width: 52%;">: {{$sekolah->nama_sekolah}}</td>
-          <td style="width: 16%;">Kelas</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
-        </tr>
-        <tr>
-          <td style="width: 19%;">Alamat</td>
-          <td style="width: 52%;">: {{$sekolah->alamat}}</td>
-          <td style="width: 16%;">Semester</td>
-          <td style="width: 13%;">:
-            @if($anggota_kelas->kelas->tapel->semester == 1)
-            1 (Ganjil)
-            @else
-            2 (Genap)
-            @endif
-          </td>
-        </tr>
-        <tr>
-          <td style="width: 19%;">Nama Peserta Didik</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nama_lengkap}} </td>
-          <td style="width: 16%;">Tahun Pelajaran</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
-        </tr>
-        <tr>
-          <td style="width: 19%;">Nomor Induk/NISN</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}} </td>
-        </tr>
-      </table>
+      <table style="width: 100%;">
+          <tr>
+            <td style="width: 22%;">Nama Sekolah</td>
+            <td style="width: 43%;">: {{$sekolah->nama_sekolah}}</td>
+            <td style="width: 15%;">Kelas</td>
+            <td style="width: 20%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
+          </tr>
+          <tr>
+            <td>Alamat</td>
+            <td>: {{$sekolah->alamat}}</td>
+            <td>Semester</td>
+            <td>:
+              @if($anggota_kelas->kelas->tapel->semester == 1)
+                1 (Ganjil)
+              @else
+                2 (Genap)
+              @endif
+            </td>
+          </tr>
+          <tr>
+            <td>Nama Peserta Didik</td>
+            <td>: {{$anggota_kelas->siswa->nama_lengkap}}</td>
+            <td>Tahun Pelajaran</td>
+            <td>: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
+          </tr>
+          <tr>
+            <td>Nomor Induk/NISN</td>
+            <td colspan="3">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}}</td>
+          </tr>
+        </table>
     </div>
 
     <div class="content">
-      <table cellspacing="0" style="padding-top: 10px;">
+      <table cellspacing="0" style="padding-top: 20px;">
         <tr class="heading">
           <td rowspan="2" style="width: 5%;">NO</td>
           <td rowspan="2" style="width: 23%;">Mata Pelajaran</td>
@@ -346,34 +346,34 @@
   <!-- Page 4 (Other) -->
   <div class="invoice-box">
     <div class="header">
-      <table>
+    <table style="width: 100%;">
         <tr>
-          <td style="width: 19%;">Nama Sekolah</td>
-          <td style="width: 52%;">: {{$sekolah->nama_sekolah}}</td>
-          <td style="width: 16%;">Kelas</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
+          <td style="width: 22%;">Nama Sekolah</td>
+          <td style="width: 43%;">: {{$sekolah->nama_sekolah}}</td>
+          <td style="width: 15%;">Kelas</td>
+          <td style="width: 20%;">: {{$anggota_kelas->kelas->nama_kelas}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Alamat</td>
-          <td style="width: 52%;">: {{$sekolah->alamat}}</td>
-          <td style="width: 16%;">Semester</td>
-          <td style="width: 13%;">:
+          <td>Alamat</td>
+          <td>: {{$sekolah->alamat}}</td>
+          <td>Semester</td>
+          <td>:
             @if($anggota_kelas->kelas->tapel->semester == 1)
-            1 (Ganjil)
+              1 (Ganjil)
             @else
-            2 (Genap)
+              2 (Genap)
             @endif
           </td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nama Peserta Didik</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nama_lengkap}} </td>
-          <td style="width: 16%;">Tahun Pelajaran</td>
-          <td style="width: 13%;">: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
+          <td>Nama Peserta Didik</td>
+          <td>: {{$anggota_kelas->siswa->nama_lengkap}}</td>
+          <td>Tahun Pelajaran</td>
+          <td>: {{$anggota_kelas->kelas->tapel->tahun_pelajaran}}</td>
         </tr>
         <tr>
-          <td style="width: 19%;">Nomor Induk/NISN</td>
-          <td style="width: 52%;">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}} </td>
+          <td>Nomor Induk/NISN</td>
+          <td colspan="3">: {{$anggota_kelas->siswa->nis}} / {{$anggota_kelas->siswa->nisn}}</td>
         </tr>
       </table>
     </div>
