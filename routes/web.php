@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('ekstrakulikuler/anggota', [Controllers\Admin\EkstrakulikulerController::class, 'store_anggota'])->name('ekstrakulikuler.anggota');
             Route::delete('ekstrakulikuler/anggota/{anggota}', [Controllers\Admin\EkstrakulikulerController::class, 'delete_anggota'])->name('ekstrakulikuler.anggota.delete');
             Route::resource('ekstrakulikuler', Controllers\Admin\EkstrakulikulerController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
+            Route::post('/legernilai/store', [LegerNilaiSiswaController::class, 'store']);
+
 
             Route::resource('rekapkehadiran', Controllers\Admin\RekapKehadiranSiswaController::class)->only(['index', 'store']);
 

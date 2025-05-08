@@ -39,7 +39,7 @@
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                  <thead class="bg-info">
+                <thead class="bg-info">
                     <tr>
                       <th rowspan="2" class="text-center" style="width: 50px;">No</th>
                       <th rowspan="2" class="text-center" style="width: 50px;">NIS</th>
@@ -47,35 +47,33 @@
                       <th rowspan="2" class="text-center" style="width: 50px;">Kelas</th>
 
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-                      <th colspan="4" class="text-center">{{$mapel_kelompok_a->pembelajaran->mapel->ringkasan_mapel}}</th>
+                      <th colspan="2" class="text-center">{{$mapel_kelompok_a->pembelajaran->mapel->nama_mapel}}</th>
                       @endforeach
 
                       @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-                      <th colspan="4" class="text-center">{{$mapel_kelompok_b->pembelajaran->mapel->ringkasan_mapel}}</th>
+                      <th colspan="2" class="text-center">{{$mapel_kelompok_b->pembelajaran->mapel->nama_mapel}}</th>
                       @endforeach
 
-                      <th colspan="2" class="text-center">Rata-Rata</th>
-                      <th colspan="2" class="text-center">Nilai Sikap</th>
+                      <th class="text-center">Jumlah Nilai</th>
+                      <th class="text-center">Predikat</th>
+                      <th class="text-center">Peringkat</th>
                       <th colspan="3" class="text-center">Kehadiran</th>
                       <th colspan="{{$count_ekstrakulikuler}}" class="text-center">Ekstrakulikuler</th>
                     </tr>
                     <tr>
-
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-                      <th class="text-center" colspan="2">Peng</th>
-                      <th class="text-center" colspan="2">Ket</th>
+                      <th class="text-center">UTS</th>
+                      <th class="text-center">UAS</th>
                       @endforeach
 
                       @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-                      <th class="text-center" colspan="2">Peng</th>
-                      <th class="text-center" colspan="2">Ket</th>
+                      <th class="text-center">UTS</th>
+                      <th class="text-center">UAS</th>
                       @endforeach
 
-                      <th class="text-center">Peng</th>
-                      <th class="text-center">Ket</th>
-
-                      <th class="text-center">Spr</th>
-                      <th class="text-center">Sos</th>
+                      <th class="text-center">Total</th>
+                      <th class="text-center">A/B/C/D</th>
+                      <th class="text-center">Ke-</th>
 
                       <th class="text-center">S</th>
                       <th class="text-center">I</th>
@@ -83,9 +81,9 @@
                       @foreach($data_ekstrakulikuler->sortBy('id') as $ekstrakulikuler)
                       <th class="text-center">{{$ekstrakulikuler->nama_ekstrakulikuler}}</th>
                       @endforeach
-
                     </tr>
                   </thead>
+
                   <tbody>
                     <?php $no = 0; ?>
                     @foreach($data_anggota_kelas->sortBy('siswa.nama_lengkap') as $anggota_kelas)
@@ -96,47 +94,52 @@
                       <td>{{$anggota_kelas->siswa->nama_lengkap}}</td>
                       <td class="text-center">{{$anggota_kelas->kelas->nama_kelas}}</td>
 
+                      @php
+                        $jumlah_nilai = 0;
+                      @endphp
+
                       @foreach($anggota_kelas->data_nilai_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_a)
                       <td class="text-center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->predikat_pengetahuan}}</td>
                       <td class="text-center">{{$nilai_kelompok_a->nilai_keterampilan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->predikat_keterampilan}}</td>
+                      @php
+                        $jumlah_nilai += $nilai_kelompok_a->nilai_pengetahuan + $nilai_kelompok_a->nilai_keterampilan;
+                      @endphp
                       @endforeach
 
                       @foreach($anggota_kelas->data_nilai_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_b)
                       <td class="text-center">{{$nilai_kelompok_b->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->predikat_pengetahuan}}</td>
                       <td class="text-center">{{$nilai_kelompok_b->nilai_keterampilan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->predikat_keterampilan}}</td>
+                      @php
+                        $jumlah_nilai += $nilai_kelompok_b->nilai_pengetahuan + $nilai_kelompok_b->nilai_keterampilan;
+                      @endphp
                       @endforeach
 
-                      <td class="text-center">{{$anggota_kelas->rata_rata_pengetahuan}}</td>
-                      <td class="text-center">{{$anggota_kelas->rata_rata_keterampilan}}</td>
+                      <td class="text-center">{{ $jumlah_nilai }}</td>
 
-                      @if($anggota_kelas->nilai_spiritual == 1)
-                      <td class="text-center">D</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 2)
-                      <td class="text-center">C</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 3)
-                      <td class="text-center">B</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 4)
-                      <td class="text-center">A</td>
+                      {{-- Predikat --}}
+                      @if($jumlah_nilai >= 80)
+                        <td class="text-center">A</td>
+                      @elseif($jumlah_nilai >= 70)
+                        <td class="text-center">B</td>
+                      @elseif($jumlah_nilai >= 60)
+                        <td class="text-center">C</td>
                       @else
-                      <td class="text-center text-danger"><strong>0</strong></td>
+                        <td class="text-center">D</td>
                       @endif
 
-                      @if($anggota_kelas->nilai_sosial == 1)
-                      <td class="text-center">D</td>
-                      @elseif($anggota_kelas->nilai_sosial == 2)
-                      <td class="text-center">C</td>
-                      @elseif($anggota_kelas->nilai_sosial == 3)
-                      <td class="text-center">B</td>
-                      @elseif($anggota_kelas->nilai_sosial == 4)
-                      <td class="text-center">A</td>
-                      @else
-                      <td class="text-center text-danger"><strong>0</strong></td>
-                      @endif
+                      {{-- Peringkat --}}
+                      @php
+                        $peringkat = $data_anggota_kelas->sortByDesc(function($item) {
+                          return $item->data_nilai_kelompok_a->sum('nilai_pengetahuan') + $item->data_nilai_kelompok_a->sum('nilai_keterampilan') + 
+                                $item->data_nilai_kelompok_b->sum('nilai_pengetahuan') + $item->data_nilai_kelompok_b->sum('nilai_keterampilan');
+                        });
+                        $peringkat_index = $peringkat->search(function ($item) use ($anggota_kelas) {
+                          return $item->id == $anggota_kelas->id;
+                        });
+                      @endphp
+                      <td class="text-center">{{ $peringkat_index + 1 }}</td>
 
+                      {{-- Kehadiran --}}
                       @if(!is_null($anggota_kelas->kehadiran_siswa))
                       <td class="text-center">{{$anggota_kelas->kehadiran_siswa->sakit}}</td>
                       <td class="text-center">{{$anggota_kelas->kehadiran_siswa->izin}}</td>
@@ -147,6 +150,7 @@
                       <td class="text-center">-</td>
                       @endif
 
+                      {{-- Ekstrakulikuler --}}
                       @foreach($anggota_kelas->data_nilai_ekstrakulikuler as $nilai_ekstrakulikuler)
                       @if($nilai_ekstrakulikuler->nilai == 1)
                       <td class="text-center">Kurang</td>
@@ -163,6 +167,7 @@
                     </tr>
                     @endforeach
                   </tbody>
+
                 </table>
               </div>
               <!-- /.table-responsive -->
