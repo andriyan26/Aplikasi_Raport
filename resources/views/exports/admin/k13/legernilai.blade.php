@@ -38,11 +38,11 @@
         <td rowspan="2" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>NAMA SISWA</strong></td>
 
         @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-        <td colspan="4" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>{{$mapel_kelompok_a->pembelajaran->mapel->ringkasan_mapel}}</strong></td>
+        <td colspan="4" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>{{$mapel_kelompok_a->pembelajaran->mapel->nama_mapel}}</strong></td>
         @endforeach
 
         @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-        <td colspan="4" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>{{$mapel_kelompok_b->pembelajaran->mapel->ringkasan_mapel}}</strong></td>
+        <td colspan="4" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>{{$mapel_kelompok_b->pembelajaran->mapel->nama_mapel}}</strong></td>
         @endforeach
 
         <td colspan="2" align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Rata-Rata</strong></td>
@@ -53,16 +53,16 @@
 
       <tr>
         @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-        <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Peng</strong></td>
+        <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Pen</strong></td>
         <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Ket</strong></td>
         @endforeach
 
         @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-        <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Peng</strong></td>
+        <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Pen</strong></td>
         <td align="center" colspan="2" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Ket</strong></td>
         @endforeach
 
-        <td align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Peng</strong></td>
+        <td align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Pen</strong></td>
         <td align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Ket</strong></td>
 
         <td align="center" style="border: 1px solid #000000; background-color: #d9ecd0;"><strong>Spr</strong></td>

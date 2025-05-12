@@ -36,11 +36,17 @@
                 </a>
               </div>
             </div>
+
+            <div class="mt-2 text-muted" style="font-size: 14px;">
+                <strong>Keterangan :</strong> <br>
+                Pen = Nilai Pengetahuan <br> Ket = Nilai Keterampilan <br> KKM = 70 (Untuk Setiap Pelajaran)
+            </div>
+
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                 <thead class="bg-info">
-                    <tr>
+                <tr>
                       <th rowspan="2" class="text-center" style="width: 50px;">No</th>
                       <th rowspan="2" class="text-center" style="width: 50px;">NIS</th>
                       <th rowspan="2" class="text-center">Nama Siswa</th>
@@ -62,13 +68,13 @@
                     </tr>
                     <tr>
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-                      <th class="text-center">UTS</th>
-                      <th class="text-center">UAS</th>
+                      <th class="text-center">Pen</th>
+                      <th class="text-center">Ket</th>
                       @endforeach
 
                       @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-                      <th class="text-center">UTS</th>
-                      <th class="text-center">UAS</th>
+                      <th class="text-center">Pen</th>
+                      <th class="text-center">Ket</th>
                       @endforeach
 
                       <th class="text-center">Total</th>

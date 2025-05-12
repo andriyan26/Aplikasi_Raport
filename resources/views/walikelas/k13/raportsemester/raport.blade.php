@@ -197,7 +197,9 @@
           <td class="center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
           <td class="center">{{$nilai_kelompok_a->predikat_pengetahuan}}</td>
           <td class="description">
-            <span>{!! nl2br($nilai_kelompok_a->k13_deskripsi_nilai_siswa->deskripsi_pengetahuan) !!}</span>
+          <span>
+            {!! nl2br(optional($nilai_kelompok_a->k13_deskripsi_nilai_siswa)->deskripsi_pengetahuan ?? '-') !!}
+          </span>
           </td>
         </tr>
         @endforeach
@@ -301,7 +303,9 @@
           <td class="center">{{$nilai_kelompok_a->nilai_keterampilan}}</td>
           <td class="center">{{$nilai_kelompok_a->predikat_keterampilan}}</td>
           <td class="description">
-            <span>{!! nl2br($nilai_kelompok_a->k13_deskripsi_nilai_siswa->deskripsi_keterampilan) !!}</span>
+          <span>
+          {!! nl2br(optional($nilai_kelompok_a->k13_deskripsi_nilai_siswa)->deskripsi_pengetahuan ?? '-') !!}
+        </span>
           </td>
         </tr>
         @endforeach
