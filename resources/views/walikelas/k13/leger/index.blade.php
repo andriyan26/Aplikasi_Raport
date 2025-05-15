@@ -37,7 +37,7 @@
               </div>
             </div>
 
-            <div class="mt-2 text-muted" style="font-size: 14px;">
+            <div class="mt-2 text-muted" style="font-size: 14px; margin-left: 15px;">
                 <strong>Keterangan :</strong> <br>
                 Pen = Nilai Pengetahuan <br> Ket = Nilai Keterampilan <br> KKM = 70 (Untuk Setiap Pelajaran)
             </div>
