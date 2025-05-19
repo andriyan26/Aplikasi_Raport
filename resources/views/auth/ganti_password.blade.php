@@ -4,7 +4,7 @@
   <div class="login-box">
     <div class="login-logo">
       <img src="/assets/dist/img/logo.png" alt="Logo" class="brand-image img-circle">
-      <p class="login-box-msg">Aplikasi <b>E</b>-Raport</p>
+      <p class="login-box-msg">Aplikasi <b>Raport</b>Digital</p>
     </div>
     <!-- /.login-logo -->
     <div class="card">

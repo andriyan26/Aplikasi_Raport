@@ -92,8 +92,9 @@
                           <select class="form-control select2" name="update_guru_id[]" style="width: 100%;">
                             <option value="">-- Pilih Guru -- </option>
                             @foreach($data_guru as $guru)
-                            <option value="{{$guru->id}}" @if($pembelajaran->guru->id == $guru->id) selected @endif>
-                              {{$guru->nama_lengkap}}, {{$guru->gelar}}
+                            <option value="{{$guru->id}}" 
+                                @if(optional($pembelajaran->guru)->id == $guru->id) selected @endif>
+                                {{$guru->nama_lengkap}}, {{$guru->gelar}}
                             </option>
                             @endforeach
                           </select>

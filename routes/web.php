@@ -2,6 +2,7 @@
 
 use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Siswa\K13\NilaiAkhirSemesterController;
 
 Route::get('/unauthorized', function () {
     $title = 'Unauthorized';
@@ -305,6 +306,7 @@ Route::middleware(['auth'])->group(function () {
         // Raport K13 Siswa
         Route::middleware('checkKurikulum:2013')->group(function () {
             Route::resource('nilaiakhir', Controllers\Siswa\K13\NilaiAkhirSemesterController::class)->only(['index']);
+            Route::get('/nilai/filter', [NilaiAkhirSemesterController::class, 'index'])->name('nilai.siswa.filter');
             // End  Raport K13 Siswa
         });
 

@@ -64,7 +64,7 @@
                       <th class="text-center">Predikat</th>
                       <th class="text-center">Peringkat</th>
                       <th colspan="3" class="text-center">Kehadiran</th>
-                      <th colspan="{{$count_ekstrakulikuler}}" class="text-center">Ekstrakulikuler</th>
+                      <th colspan="2" class="text-center">Ekstrakulikuler</th>
                     </tr>
                     <tr>
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
@@ -84,9 +84,8 @@
                       <th class="text-center">S</th>
                       <th class="text-center">I</th>
                       <th class="text-center">A</th>
-                      @foreach($data_ekstrakulikuler->sortBy('id') as $ekstrakulikuler)
-                      <th class="text-center">{{$ekstrakulikuler->nama_ekstrakulikuler}}</th>
-                      @endforeach
+                    
+                      <th class="text-center">Hasil</th>
                     </tr>
                   </thead>
 
@@ -156,20 +155,31 @@
                       <td class="text-center">-</td>
                       @endif
 
-                      {{-- Ekstrakulikuler --}}
-                      @foreach($anggota_kelas->data_nilai_ekstrakulikuler as $nilai_ekstrakulikuler)
-                      @if($nilai_ekstrakulikuler->nilai == 1)
-                      <td class="text-center">Kurang</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 2)
-                      <td class="text-center">Cukup</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 3)
-                      <td class="text-center">Baik</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 4)
-                      <td class="text-center">Sangat Baik</td>
-                      @else
-                      <td class="text-center">-</td>
-                      @endif
-                      @endforeach
+                      {{-- Dropdown dan tempat nilai di dalam <td> --}}
+                      <td colspan="{{ $count_ekstrakulikuler }}" class="text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <select id="ekskul-select-{{ $anggota_kelas->id }}"
+                                  class="form-control form-control-sm d-inline-block w-auto"
+                                  onchange="tampilkanNilaiEkskul(this, {{ $anggota_kelas->id }})">
+                            <option value="">-- Pilih Ekskul --</option>
+                            @foreach($data_ekstrakulikuler->sortBy('id') as $ekskul)
+                              <option value="{{ $ekskul->nama_ekstrakulikuler }}">{{ $ekskul->nama_ekstrakulikuler }}</option>
+                            @endforeach
+                          </select>
+                          <div id="nilai-ekskul-{{ $anggota_kelas->id }}" class="ms-2 px-2 py-1 border rounded bg-light" style="min-width: 120px;">-</div>
+                        </div>
+                      </td>
+
+
+                      {{-- Data JS untuk tiap anggota kelas --}}
+                      <script>
+                        window.dataNilaiEkskul = window.dataNilaiEkskul || {};
+                        window.dataNilaiEkskul[{{ $anggota_kelas->id }}] = @json($anggota_kelas->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+                          return [$nilai->nama_ekskul => ['nilai' => $nilai->nilai]];
+                        }));
+                      </script>
+
+
                     </tr>
                     @endforeach
                   </tbody>
@@ -193,3 +203,40 @@
 <!-- /.content-wrapper -->
 
 @include('layouts.main.footer')
+
+<script>
+  // Data nilai ekskul dalam bentuk JS
+  const dataNilaiEkskul = @json($data_anggota_kelas->mapWithKeys(function($anggota) {
+    return [
+      $anggota->id => $anggota->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+        return [
+          $nilai->nama_ekskul => ['nilai' => $nilai->nilai]
+        ];
+      })
+    ];
+  }));
+
+  function tampilkanNilaiEkskul(selectElement, anggotaId) {
+    const namaEkskul = selectElement.value;
+    const container = document.getElementById('nilai-ekskul-' + anggotaId);
+    const nilaiData = dataNilaiEkskul[anggotaId]?.[namaEkskul];
+
+    if (nilaiData) {
+      const teks = ['-', 'Kurang', 'Cukup', 'Baik', 'Sangat Baik'];
+      container.innerText = teks[nilaiData.nilai] ?? '-';
+    } else {
+      container.innerText = '-';
+    }
+  }
+
+  // Ketika halaman dimuat, otomatis tampilkan nilai ekskul pertama
+  document.addEventListener('DOMContentLoaded', function() {
+    @foreach($data_anggota_kelas as $anggota)
+      const selectEkskul{{ $anggota->id }} = document.getElementById('ekskul-select-{{ $anggota->id }}');
+      if (selectEkskul{{ $anggota->id }}.options.length > 1) {
+        selectEkskul{{ $anggota->id }}.selectedIndex = 1; // Pilih ekskul pertama
+        tampilkanNilaiEkskul(selectEkskul{{ $anggota->id }}, {{ $anggota->id }});
+      }
+    @endforeach
+  });
+</script>
