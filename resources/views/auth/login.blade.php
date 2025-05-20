@@ -9,7 +9,7 @@
     </div>
     <!-- /.login-logo -->
     <div class="card">
-      <div class="card-body login-card-body">
+   <div class="card-body login-card-body">
       <p class="login-box-msg" style="font-size: 22px; font-weight: bold; font-family: 'Times New Roman', serif; text-align: center; letter-spacing: 1.2px; color: #333;">LOGIN</p>
 
         <form method="post" action="{{ route('login') }}">
@@ -63,6 +63,11 @@
             </div>
           </div>
         </form>
+        <div class="text-center mt-3">
+          <a href="{{ route('login.form.siswa') }}" class="btn btn-outline-success btn-block" style="font-weight: bold;">
+            Login Sebagai Siswa
+          </a>
+        </div>
 
       </div>
       <!-- /.login-card-body -->

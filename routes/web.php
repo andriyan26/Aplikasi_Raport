@@ -3,11 +3,15 @@
 use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Siswa\K13\NilaiAkhirSemesterController;
+use App\Http\Controllers\LoginController;
 
 Route::get('/unauthorized', function () {
     $title = 'Unauthorized';
     return view('errorpage.401', compact('title'));
 });
+
+Route::get('/login-siswa', [LoginController::class, 'showLoginFormSiswa'])->name('login.form.siswa');
+Route::post('/login-siswa', [LoginController::class, 'loginSiswa'])->name('login.siswa');
 
 
 Route::get('/', [Controllers\AuthController::class, 'index'])->name('login');
