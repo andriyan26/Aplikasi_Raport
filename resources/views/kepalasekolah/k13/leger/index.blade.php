@@ -36,56 +36,59 @@
                 </a>
               </div>
             </div>
+
+            <div class="mt-2 text-muted" style="font-size: 14px; margin-left: 15px;">
+                <strong>Keterangan :</strong> <br>
+                Pen = Nilai Pengetahuan <br> Ket = Nilai Keterampilan <br> KKM = 70 (Untuk Setiap Pelajaran)
+            </div>
+
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                  <thead class="bg-info">
-                    <tr>
+                <thead class="bg-info">
+                <tr>
                       <th rowspan="2" class="text-center" style="width: 50px;">No</th>
                       <th rowspan="2" class="text-center" style="width: 50px;">NIS</th>
                       <th rowspan="2" class="text-center">Nama Siswa</th>
                       <th rowspan="2" class="text-center" style="width: 50px;">Kelas</th>
 
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-                      <th colspan="4" class="text-center">{{$mapel_kelompok_a->pembelajaran->mapel->ringkasan_mapel}}</th>
+                      <th colspan="2" class="text-center">{{$mapel_kelompok_a->pembelajaran->mapel->nama_mapel}}</th>
                       @endforeach
 
                       @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-                      <th colspan="4" class="text-center">{{$mapel_kelompok_b->pembelajaran->mapel->ringkasan_mapel}}</th>
+                      <th colspan="2" class="text-center">{{$mapel_kelompok_b->pembelajaran->mapel->nama_mapel}}</th>
                       @endforeach
 
-                      <th colspan="2" class="text-center">Rata-Rata</th>
-                      <th colspan="2" class="text-center">Nilai Sikap</th>
+                      <th class="text-center">Jumlah Nilai</th>
+                      <th class="text-center">Predikat</th>
+                      <th class="text-center">Peringkat</th>
                       <th colspan="3" class="text-center">Kehadiran</th>
-                      <th colspan="{{$count_ekstrakulikuler}}" class="text-center">Ekstrakulikuler</th>
+                      <th colspan="2" class="text-center">Ekstrakulikuler</th>
                     </tr>
                     <tr>
-
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
-                      <th class="text-center" colspan="2">Peng</th>
-                      <th class="text-center" colspan="2">Ket</th>
+                      <th class="text-center">Pen</th>
+                      <th class="text-center">Ket</th>
                       @endforeach
 
                       @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_b)
-                      <th class="text-center" colspan="2">Peng</th>
-                      <th class="text-center" colspan="2">Ket</th>
+                      <th class="text-center">Pen</th>
+                      <th class="text-center">Ket</th>
                       @endforeach
 
-                      <th class="text-center">Peng</th>
-                      <th class="text-center">Ket</th>
-
-                      <th class="text-center">Spr</th>
-                      <th class="text-center">Sos</th>
+                      <th class="text-center">Total</th>
+                      <th class="text-center">A/B/C/D</th>
+                      <th class="text-center">Ke-</th>
 
                       <th class="text-center">S</th>
                       <th class="text-center">I</th>
                       <th class="text-center">A</th>
-                      @foreach($data_ekstrakulikuler->sortBy('id') as $ekstrakulikuler)
-                      <th class="text-center">{{$ekstrakulikuler->nama_ekstrakulikuler}}</th>
-                      @endforeach
-
+                    
+                      <th class="text-center">Hasil</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     <?php $no = 0; ?>
                     @foreach($data_anggota_kelas->sortBy('siswa.nama_lengkap') as $anggota_kelas)
@@ -96,47 +99,58 @@
                       <td>{{$anggota_kelas->siswa->nama_lengkap}}</td>
                       <td class="text-center">{{$anggota_kelas->kelas->nama_kelas}}</td>
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_a)
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->predikat_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_keterampilan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->predikat_keterampilan}}</td>
+                      @php
+                        $jumlah_nilai = 0;
+                      @endphp
+
+                      @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_a->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_b)
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->predikat_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_keterampilan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->predikat_keterampilan}}</td>
+                      @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_b->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
-                      <td class="text-center">{{$anggota_kelas->rata_rata_pengetahuan}}</td>
-                      <td class="text-center">{{$anggota_kelas->rata_rata_keterampilan}}</td>
+                      <td class="text-center">{{ $jumlah_nilai }}</td>
 
-                      @if($anggota_kelas->nilai_spiritual == 1)
-                      <td class="text-center">D</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 2)
-                      <td class="text-center">C</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 3)
-                      <td class="text-center">B</td>
-                      @elseif($anggota_kelas->nilai_spiritual == 4)
-                      <td class="text-center">A</td>
+                      {{-- Predikat --}}
+                      @if($jumlah_nilai >= 80)
+                        <td class="text-center">A</td>
+                      @elseif($jumlah_nilai >= 70)
+                        <td class="text-center">B</td>
+                      @elseif($jumlah_nilai >= 60)
+                        <td class="text-center">C</td>
                       @else
-                      <td class="text-center text-danger"><strong>0</strong></td>
+                        <td class="text-center">D</td>
                       @endif
 
-                      @if($anggota_kelas->nilai_sosial == 1)
-                      <td class="text-center">D</td>
-                      @elseif($anggota_kelas->nilai_sosial == 2)
-                      <td class="text-center">C</td>
-                      @elseif($anggota_kelas->nilai_sosial == 3)
-                      <td class="text-center">B</td>
-                      @elseif($anggota_kelas->nilai_sosial == 4)
-                      <td class="text-center">A</td>
-                      @else
-                      <td class="text-center text-danger"><strong>0</strong></td>
-                      @endif
+                      {{-- Peringkat --}}
+                      @php
+                        $peringkat = $data_anggota_kelas->sortByDesc(function($item) {
+                          return $item->data_nilai_kelompok_a->sum('nilai_pengetahuan') + $item->data_nilai_kelompok_a->sum('nilai_keterampilan') + 
+                                $item->data_nilai_kelompok_b->sum('nilai_pengetahuan') + $item->data_nilai_kelompok_b->sum('nilai_keterampilan');
+                        });
+                        $peringkat_index = $peringkat->search(function ($item) use ($anggota_kelas) {
+                          return $item->id == $anggota_kelas->id;
+                        });
+                      @endphp
+                      <td class="text-center">{{ $peringkat_index + 1 }}</td>
 
+                      {{-- Kehadiran --}}
                       @if(!is_null($anggota_kelas->kehadiran_siswa))
                       <td class="text-center">{{$anggota_kelas->kehadiran_siswa->sakit}}</td>
                       <td class="text-center">{{$anggota_kelas->kehadiran_siswa->izin}}</td>
@@ -147,22 +161,35 @@
                       <td class="text-center">-</td>
                       @endif
 
-                      @foreach($anggota_kelas->data_nilai_ekstrakulikuler as $nilai_ekstrakulikuler)
-                      @if($nilai_ekstrakulikuler->nilai == 1)
-                      <td class="text-center">Kurang</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 2)
-                      <td class="text-center">Cukup</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 3)
-                      <td class="text-center">Baik</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 4)
-                      <td class="text-center">Sangat Baik</td>
-                      @else
-                      <td class="text-center">-</td>
-                      @endif
-                      @endforeach
+                      {{-- Dropdown dan tempat nilai di dalam <td> --}}
+                      <td colspan="{{ $count_ekstrakulikuler }}" class="text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <select id="ekskul-select-{{ $anggota_kelas->id }}"
+                                  class="form-control form-control-sm d-inline-block w-auto"
+                                  onchange="tampilkanNilaiEkskul(this, {{ $anggota_kelas->id }})">
+                            <option value="">-- Pilih Ekskul --</option>
+                            @foreach($data_ekstrakulikuler->sortBy('id') as $ekskul)
+                              <option value="{{ $ekskul->nama_ekstrakulikuler }}">{{ $ekskul->nama_ekstrakulikuler }}</option>
+                            @endforeach
+                          </select>
+                          <div id="nilai-ekskul-{{ $anggota_kelas->id }}" class="ms-2 px-2 py-1 border rounded bg-light" style="min-width: 120px;">-</div>
+                        </div>
+                      </td>
+
+
+                      {{-- Data JS untuk tiap anggota kelas --}}
+                      <script>
+                        window.dataNilaiEkskul = window.dataNilaiEkskul || {};
+                        window.dataNilaiEkskul[{{ $anggota_kelas->id }}] = @json($anggota_kelas->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+                          return [$nilai->nama_ekskul => ['nilai' => $nilai->nilai]];
+                        }));
+                      </script>
+
+
                     </tr>
                     @endforeach
                   </tbody>
+
                 </table>
               </div>
               <!-- /.table-responsive -->
@@ -182,3 +209,40 @@
 <!-- /.content-wrapper -->
 
 @include('layouts.main.footer')
+
+<script>
+  // Data nilai ekskul dalam bentuk JS
+  const dataNilaiEkskul = @json($data_anggota_kelas->mapWithKeys(function($anggota) {
+    return [
+      $anggota->id => $anggota->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+        return [
+          $nilai->nama_ekskul => ['nilai' => $nilai->nilai]
+        ];
+      })
+    ];
+  }));
+
+  function tampilkanNilaiEkskul(selectElement, anggotaId) {
+    const namaEkskul = selectElement.value;
+    const container = document.getElementById('nilai-ekskul-' + anggotaId);
+    const nilaiData = dataNilaiEkskul[anggotaId]?.[namaEkskul];
+
+    if (nilaiData) {
+      const teks = ['-', 'Kurang', 'Cukup', 'Baik', 'Sangat Baik'];
+      container.innerText = teks[nilaiData.nilai] ?? '-';
+    } else {
+      container.innerText = '-';
+    }
+  }
+
+  // Ketika halaman dimuat, otomatis tampilkan nilai ekskul pertama
+  document.addEventListener('DOMContentLoaded', function() {
+    @foreach($data_anggota_kelas as $anggota)
+      const selectEkskul{{ $anggota->id }} = document.getElementById('ekskul-select-{{ $anggota->id }}');
+      if (selectEkskul{{ $anggota->id }}.options.length > 1) {
+        selectEkskul{{ $anggota->id }}.selectedIndex = 1; // Pilih ekskul pertama
+        tampilkanNilaiEkskul(selectEkskul{{ $anggota->id }}, {{ $anggota->id }});
+      }
+    @endforeach
+  });
+</script>
