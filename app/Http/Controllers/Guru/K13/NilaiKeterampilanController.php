@@ -132,22 +132,41 @@ class NilaiKeterampilanController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $ada_nilai_invalid = false;
+    
         for ($cound_siswa = 0; $cound_siswa < count($request->anggota_kelas_id); $cound_siswa++) {
             for ($count_penilaian = 0; $count_penilaian < count($request->k13_rencana_nilai_keterampilan_id); $count_penilaian++) {
-                if ($request->nilai[$count_penilaian][$cound_siswa] >= 0 && $request->nilai[$count_penilaian][$cound_siswa] <= 100) {
-                    $nilai = K13NilaiKeterampilan::where('anggota_kelas_id', $request->anggota_kelas_id[$cound_siswa])->where('k13_rencana_nilai_keterampilan_id', $request->k13_rencana_nilai_keterampilan_id[$count_penilaian])->first();
-                    $data_nilai = [
-                        'nilai' => ltrim($request->nilai[$count_penilaian][$cound_siswa]),
-                        'updated_at' => Carbon::now(),
-                    ];
-                    $nilai->update($data_nilai);
-                } else {
-                    return back()->with('toast_error', 'Nilai harus berisi antara 0 s/d 100');
+    
+                // Cek apakah nilai ada dan valid
+                $nilai_input = $request->nilai[$count_penilaian][$cound_siswa] ?? null;
+    
+                if (is_numeric($nilai_input) && $nilai_input >= 0 && $nilai_input <= 100) {
+                    $nilai = K13NilaiKeterampilan::where('anggota_kelas_id', $request->anggota_kelas_id[$cound_siswa])
+                        ->where('k13_rencana_nilai_keterampilan_id', $request->k13_rencana_nilai_keterampilan_id[$count_penilaian])
+                        ->first();
+    
+                    if ($nilai) {
+                        $data_nilai = [
+                            'nilai' => ltrim($nilai_input),
+                            'updated_at' => Carbon::now(),
+                        ];
+                        $nilai->update($data_nilai);
+                    }
+    
+                } elseif ($nilai_input !== null && $nilai_input !== '') {
+                    // Catat kalau ada nilai yang tidak valid (misal: 110 atau teks)
+                    $ada_nilai_invalid = true;
                 }
             }
         }
-        return redirect('guru/nilaiketerampilan')->with('toast_success', 'Data nilai keterampilan berhasil edit.');
+    
+        if ($ada_nilai_invalid) {
+            return back()->with('toast_error', 'Beberapa nilai tidak valid (harus 0 - 100). Data lainnya tetap disimpan.');
+        }
+    
+        return redirect('guru/nilaiketerampilan')->with('toast_success', 'Data nilai keterampilan berhasil diupdate.');
     }
+    
 
     public function format_import(Request $request)
     {

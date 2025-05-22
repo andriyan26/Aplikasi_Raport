@@ -103,20 +103,26 @@
                         $jumlah_nilai = 0;
                       @endphp
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_a)
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_keterampilan}}</td>
-                      @php
-                        $jumlah_nilai += $nilai_kelompok_a->nilai_pengetahuan + $nilai_kelompok_a->nilai_keterampilan;
-                      @endphp
+                      @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_a->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_b)
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_keterampilan}}</td>
-                      @php
-                        $jumlah_nilai += $nilai_kelompok_b->nilai_pengetahuan + $nilai_kelompok_b->nilai_keterampilan;
-                      @endphp
+                      @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_b->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
                       <td class="text-center">{{ $jumlah_nilai }}</td>

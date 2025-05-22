@@ -50,19 +50,20 @@
                 </form>
               </div>
 
-              <div>
+              <!-- <div>
                 <a href="{{ route('k13leger.show', $kelas->id) }}" class="btn btn-primary float-right"><i class="fas fa-download"></i> Download Leger</a>
-              </div>
+              </div> -->
 
               <div class="mt-2 text-muted" style="font-size: 14px;">
                 <strong>Keterangan :</strong> <br>
                 Pen = Nilai Pengetahuan <br> Ket = Nilai Keterampilan <br> KKM = 70 (Untuk Setiap Pelajaran)
               </div>
 
-              <div class="table-responsive pt-3">
+              <div class="card-body">
+              <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                  <thead class="bg-info">
-                    <tr>
+                <thead class="bg-info">
+                <tr>
                       <th rowspan="2" class="text-center" style="width: 50px;">No</th>
                       <th rowspan="2" class="text-center" style="width: 50px;">NIS</th>
                       <th rowspan="2" class="text-center">Nama Siswa</th>
@@ -80,7 +81,7 @@
                       <th class="text-center">Predikat</th>
                       <th class="text-center">Peringkat</th>
                       <th colspan="3" class="text-center">Kehadiran</th>
-                      <th colspan="{{$count_ekstrakulikuler}}" class="text-center">Ekstrakulikuler</th>
+                      <th colspan="2" class="text-center">Ekstrakulikuler</th>
                     </tr>
                     <tr>
                       @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel_kelompok_a)
@@ -100,9 +101,8 @@
                       <th class="text-center">S</th>
                       <th class="text-center">I</th>
                       <th class="text-center">A</th>
-                      @foreach($data_ekstrakulikuler->sortBy('id') as $ekstrakulikuler)
-                      <th class="text-center">{{$ekstrakulikuler->nama_ekstrakulikuler}}</th>
-                      @endforeach
+                    
+                      <th class="text-center">Hasil</th>
                     </tr>
                   </thead>
 
@@ -120,20 +120,26 @@
                         $jumlah_nilai = 0;
                       @endphp
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_a)
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_a->nilai_keterampilan}}</td>
-                      @php
-                        $jumlah_nilai += $nilai_kelompok_a->nilai_pengetahuan + $nilai_kelompok_a->nilai_keterampilan;
-                      @endphp
+                      @foreach($data_mapel_kelompok_a->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_a->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
-                      @foreach($anggota_kelas->data_nilai_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $nilai_kelompok_b)
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_pengetahuan}}</td>
-                      <td class="text-center">{{$nilai_kelompok_b->nilai_keterampilan}}</td>
-                      @php
-                        $jumlah_nilai += $nilai_kelompok_b->nilai_pengetahuan + $nilai_kelompok_b->nilai_keterampilan;
-                      @endphp
+                      @foreach($data_mapel_kelompok_b->sortBy('pembelajaran.mapel.k13_mapping_mapel.nomor_urut') as $mapel)
+                        @php
+                          $nilai = $anggota_kelas->data_nilai_kelompok_b->firstWhere('pembelajaran.mapel_id', $mapel->pembelajaran->mapel->id);
+                          $nilai_p = $nilai && $nilai->nilai_pengetahuan !== null ? $nilai->nilai_pengetahuan : 0;
+                          $nilai_k = $nilai && $nilai->nilai_keterampilan !== null ? $nilai->nilai_keterampilan : 0;
+                          $jumlah_nilai += $nilai_p + $nilai_k;
+                        @endphp
+                        <td class="text-center">{{ $nilai_p ?: '-' }}</td>
+                        <td class="text-center">{{ $nilai_k ?: '-' }}</td>
                       @endforeach
 
                       <td class="text-center">{{ $jumlah_nilai }}</td>
@@ -172,26 +178,39 @@
                       <td class="text-center">-</td>
                       @endif
 
-                      {{-- Ekstrakulikuler --}}
-                      @foreach($anggota_kelas->data_nilai_ekstrakulikuler as $nilai_ekstrakulikuler)
-                      @if($nilai_ekstrakulikuler->nilai == 1)
-                      <td class="text-center">Kurang</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 2)
-                      <td class="text-center">Cukup</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 3)
-                      <td class="text-center">Baik</td>
-                      @elseif($nilai_ekstrakulikuler->nilai == 4)
-                      <td class="text-center">Sangat Baik</td>
-                      @else
-                      <td class="text-center">-</td>
-                      @endif
-                      @endforeach
+                      {{-- Dropdown dan tempat nilai di dalam <td> --}}
+                      <td colspan="{{ $count_ekstrakulikuler }}" class="text-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <select id="ekskul-select-{{ $anggota_kelas->id }}"
+                                  class="form-control form-control-sm d-inline-block w-auto"
+                                  onchange="tampilkanNilaiEkskul(this, {{ $anggota_kelas->id }})">
+                            <option value="">-- Pilih Ekskul --</option>
+                            @foreach($data_ekstrakulikuler->sortBy('id') as $ekskul)
+                              <option value="{{ $ekskul->nama_ekstrakulikuler }}">{{ $ekskul->nama_ekstrakulikuler }}</option>
+                            @endforeach
+                          </select>
+                          <div id="nilai-ekskul-{{ $anggota_kelas->id }}" class="ms-2 px-2 py-1 border rounded bg-light" style="min-width: 120px;">-</div>
+                        </div>
+                      </td>
+
+
+                      {{-- Data JS untuk tiap anggota kelas --}}
+                      <script>
+                        window.dataNilaiEkskul = window.dataNilaiEkskul || {};
+                        window.dataNilaiEkskul[{{ $anggota_kelas->id }}] = @json($anggota_kelas->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+                          return [$nilai->nama_ekskul => ['nilai' => $nilai->nilai]];
+                        }));
+                      </script>
+
+
                     </tr>
                     @endforeach
                   </tbody>
 
                 </table>
               </div>
+              <!-- /.table-responsive -->
+            </div>
             </div>
 
           </div>
@@ -208,3 +227,40 @@
 <!-- /.content-wrapper -->
 
 @include('layouts.main.footer')
+
+<script>
+  // Data nilai ekskul dalam bentuk JS
+  const dataNilaiEkskul = @json($data_anggota_kelas->mapWithKeys(function($anggota) {
+    return [
+      $anggota->id => $anggota->data_nilai_ekstrakulikuler->mapWithKeys(function($nilai) {
+        return [
+          $nilai->nama_ekskul => ['nilai' => $nilai->nilai]
+        ];
+      })
+    ];
+  }));
+
+  function tampilkanNilaiEkskul(selectElement, anggotaId) {
+    const namaEkskul = selectElement.value;
+    const container = document.getElementById('nilai-ekskul-' + anggotaId);
+    const nilaiData = dataNilaiEkskul[anggotaId]?.[namaEkskul];
+
+    if (nilaiData) {
+      const teks = ['-', 'Kurang', 'Cukup', 'Baik', 'Sangat Baik'];
+      container.innerText = teks[nilaiData.nilai] ?? '-';
+    } else {
+      container.innerText = '-';
+    }
+  }
+
+  // Ketika halaman dimuat, otomatis tampilkan nilai ekskul pertama
+  document.addEventListener('DOMContentLoaded', function() {
+    @foreach($data_anggota_kelas as $anggota)
+      const selectEkskul{{ $anggota->id }} = document.getElementById('ekskul-select-{{ $anggota->id }}');
+      if (selectEkskul{{ $anggota->id }}.options.length > 1) {
+        selectEkskul{{ $anggota->id }}.selectedIndex = 1; // Pilih ekskul pertama
+        tampilkanNilaiEkskul(selectEkskul{{ $anggota->id }}, {{ $anggota->id }});
+      }
+    @endforeach
+  });
+</script>
